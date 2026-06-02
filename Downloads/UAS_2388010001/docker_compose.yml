@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  # PHP Service (Dynamic App)
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.txt
+    container_name: kerudung_app
+    volumes:
+      - ./dynamic-app:/var/www/html
+    environment:
+      - DB_HOST=db
+      - DB_USER=sitimalikha19
+      - DB_PASSWORD=secretpass
+      - DB_NAME=kerudung_db
+    depends_on:
+      - db
+
+  # Nginx Service
+  nginx:
+    image: nginx:alpine
+    container_name: kerudung_nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./dynamic-app:/var/www/html
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./static-cv:/var/www/static-cv
+    depends_on:
+      - app
+
+  # PostgreSQL Database
+  db:
+    image: postgres:15-alpine
+    container_name: kerudung_db
+    environment:
+      - POSTGRES_USER=sitimalikha19
+      - POSTGRES_PASSWORD=secretpass
+      - POSTGRES_DB=kerudung_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
