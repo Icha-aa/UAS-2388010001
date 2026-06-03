@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  # Service untuk Aplikasi PHP (Dynamic App)
+  # Service untuk Aplikasi PHP
   app:
     build:
       context: .
@@ -32,20 +32,21 @@ services:
     depends_on:
       - app
 
-  # Service untuk Database (PostgreSQL)
+  # Service untuk Database (Ubah ke MySQL agar cocok dengan uas_db.sql)
   db:
-    image: postgres:15-alpine
+    image: mysql:8.0
     container_name: kerudung_db
     restart: always
     environment:
-      - POSTGRES_USER=sitimalikha19
-      - POSTGRES_PASSWORD=secretpass
-      - POSTGRES_DB=kerudung_db
+      - MYSQL_ROOT_PASSWORD=secretpass
+      - MYSQL_USER=sitimalikha19
+      - MYSQL_PASSWORD=secretpass
+      - MYSQL_DATABASE=kerudung_db
     ports:
-      - "5432:5432"
+      - "3306:3306"
     volumes:
       - ./database/uas_db.sql:/docker-entrypoint-initdb.d/init.sql
-      - pgdata:/var/lib/postgresql/data
+      - mysql_data:/var/lib/mysql
 
 volumes:
-  pgdata:
+  mysql_data:
