@@ -8,7 +8,6 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout Source Code
         uses: actions/checkout@v3
@@ -21,5 +20,5 @@ jobs:
 
       - name: Build and Push Static Image
         run: |
-          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/kerudung-static:latest -f Dockerfile .
-          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/kerudung-static:latest
+          docker build -t ${{ env.DOCKER_HUB_USERNAME }}/kerudung-static:latest -f Dockerfile .
+          docker push ${{ env.DOCKER_HUB_USERNAME }}/kerudung-static:latest
