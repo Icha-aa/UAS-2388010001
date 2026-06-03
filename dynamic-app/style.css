@@ -1,28 +1,66 @@
-:root { --pink: #ff69b4; --dark: #333; --white: #ffffff; --grey: #f4f4f4; }
+/* Pengaturan Dasar */
+body { 
+    font-family: 'Segoe UI', sans-serif; 
+    margin: 0; 
+    padding: 0; 
+    color: #333; 
+}
 
-body { font-family: 'Helvetica', sans-serif; background: var(--white); margin: 0; color: var(--dark); scroll-behavior: smooth; }
+/* Navigasi */
+nav { 
+    display: flex; 
+    justify-content: space-between; 
+    padding: 20px 50px; 
+    background: #fff; 
+    align-items: center; 
+}
 
-header { padding: 30px 10%; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--grey); }
-.logo { font-size: 28px; font-weight: bold; letter-spacing: 2px; }
-nav a { text-decoration: none; color: var(--dark); margin-left: 20px; font-size: 12px; font-weight: bold; }
+.logo { font-weight: bold; font-size: 24px; letter-spacing: 2px; }
 
-/* Banner Grid Kotak Tajam */
-.hero-grid { display: grid; grid-template-columns: 2fr 1fr; grid-template-rows: 200px 200px; gap: 5px; padding: 10px 10%; }
-.hero-main, .hero-sub1, .hero-sub2 { background: var(--grey); }
+.menu a { margin-left: 20px; text-decoration: none; color: #333; }
 
-.container { padding: 50px 10%; }
-.title { text-align: center; font-size: 24px; margin-bottom: 40px; letter-spacing: 3px; }
+/* Hero Section */
+.hero { 
+    height: 70vh; 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center; 
+    align-items: center; 
+    background: #fdf6f4; /* Warna kalem untuk hijab */
+    text-align: center; 
+}
 
-.about { background: var(--grey); text-align: center; padding: 60px 20%; }
+.btn { 
+    padding: 12px 30px; 
+    background: #5d4037; 
+    color: #fff; 
+    text-decoration: none; 
+    margin-top: 20px; 
+    border-radius: 5px;
+}
 
-/* Produk Kotak Tajam */
-.grid-produk { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
-.card { border: 1px solid #eee; transition: 0.3s; }
-.card:hover { border-color: var(--pink); }
-.card-img { height: 300px; background: #eee; overflow: hidden; }
-.card-img img { width: 100%; height: 100%; object-fit: cover; }
-.card-info { padding: 20px; text-align: center; }
+/* Produk */
+.section-title { text-align: center; margin: 40px 0; }
 
-.btn-pink { display: inline-block; padding: 10px 20px; background: var(--pink); color: white; text-decoration: none; font-size: 12px; margin-top: 10px; }
+.product-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+    gap: 30px; 
+    padding: 0 50px; 
+}
 
-footer { padding: 50px 10%; text-align: center; background: #333; color: white; font-size: 14px; }
+.product-img { 
+    height: 300px; 
+    background: #eee; 
+    margin-bottom: 10px; 
+    border-radius: 8px;
+}
+
+/* Footer */
+footer { 
+    padding: 40px; 
+    background: #333; 
+    color: #fff; 
+    text-align: center; 
+    margin-top: 50px; 
+}
