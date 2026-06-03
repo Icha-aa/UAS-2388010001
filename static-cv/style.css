@@ -1,0 +1,182 @@
+/* Reset Default Style */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f3f4f6;
+    color: #1f2937;
+    line-height: 1.6;
+    padding: 40px 20px;
+}
+
+/* Container Utama */
+.cv-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+}
+
+/* Header Section */
+.cv-header {
+    background-color: #1e3a8a; /* Deep Indigo Navy */
+    color: #ffffff;
+    padding: 40px;
+}
+
+.cv-header h1 {
+    font-size: 28pt;
+    font-weight: 700;
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+}
+
+.cv-header .subtitle {
+    font-size: 14pt;
+    font-weight: 300;
+    color: #93c5fd;
+    margin-bottom: 20px;
+}
+
+.contact-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    font-size: 10.5pt;
+    color: #e0f2fe;
+}
+
+/* Body Content */
+.cv-body {
+    padding: 40px;
+}
+
+.cv-section {
+    margin-bottom: 35px;
+}
+
+/* Variasi Heading Kiri Accent */
+.cv-section h2 {
+    font-size: 15pt;
+    color: #1e3a8a;
+    border-left: 4px solid #3b82f6;
+    padding-left: 12px;
+    margin-bottom: 15px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.cv-section p {
+    font-size: 11pt;
+    color: #4b5563;
+    text-align: justify;
+}
+
+/* Timeline Pendidikan */
+.timeline-item {
+    margin-bottom: 15px;
+}
+
+.timeline-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.timeline-header h3 {
+    font-size: 12pt;
+    color: #111827;
+    font-weight: 600;
+}
+
+.timeline-header .date {
+    font-size: 10pt;
+    background: #eff6ff;
+    color: #2563eb;
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-weight: 500;
+}
+
+.institution {
+    font-weight: 500;
+    color: #374151;
+    font-size: 11pt;
+}
+
+.desc {
+    font-size: 10.5pt !important;
+    color: #6b7280 !important;
+    margin-top: 4px;
+}
+
+/* Grid Skills */
+.skills-grid {
+    display: block;
+}
+
+.skill-category {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 12px;
+}
+
+.skill-category h3 {
+    font-size: 11pt;
+    color: #1e3a8a;
+    margin-bottom: 5px;
+}
+
+.project-item h3 {
+    font-size: 12pt;
+    color: #111827;
+    margin-bottom: 4px;
+}
+
+/* Footer Section */
+.cv-footer {
+    background: #f8fafc;
+    padding: 30px;
+    text-align: center;
+    border-top: 1px solid #e2e8f0;
+}
+
+.cv-footer p {
+    font-size: 10pt;
+    color: #6b7280;
+}
+
+/* Button & Interaktif */
+.btn {
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-family: 'Inter', sans-serif;
+    font-size: 10pt;
+    font-weight: 500;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: background 0.2s;
+}
+
+.btn:hover {
+    background-color: #1d4ed8;
+}
+
+.hidden-msg {
+    margin-top: 12px;
+    font-size: 11pt;
+    font-weight: 600;
+    color: #059669;
+}
