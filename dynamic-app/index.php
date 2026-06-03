@@ -27,9 +27,9 @@
             </ul>
 
             <div class="header-icons">
-                <span>🔍</span>
-                <span>👤</span>
-                <span>👜</span>
+                <span>search</span>
+                <span>profile</span>
+                <span>keranjang</span>
             </div>
         </div>
     </header>
