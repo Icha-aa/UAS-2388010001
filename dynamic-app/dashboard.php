@@ -1,65 +1,125 @@
-<?php
-require_once 'src/auth.php';
-require_once 'src/db.php';
-require_once 'src/helpers.php';
-urusLogin();
-
-$products = $pdo->query("SELECT * FROM products ORDER BY id DESC")->fetchAll();
-?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard Admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MALIKHA - Elegant Hijab</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <style>
-        table { width: 100%; border-collapse: collapse; background: #fff; margin-top: 20px;}
-        table, th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
-        th { background-color: #ffb6c1; }
-        .btn { padding: 5px 10px; text-decoration: none; border-radius: 4px; font-size: 14px; }
-        .btn-add { background: #ff69b4; color: white; padding: 10px 15px; display: inline-block; margin-bottom: 10px; border-radius: 5px;}
-        .btn-edit { background: #f39c12; color: white; }
-        .btn-del { background: #e74c3c; color: white; }
-    </style>
 </head>
 <body>
-<header>
-    <div class="logo">Siti Hijab Admin</div>
-    <nav>
-        <a href="index.php" target="_blank">Lihat Toko</a>
-        <a href="logout.php" style="color: red;">Logout</a>
-    </nav>
-</header>
-<div class="container">
-    <h2>Manajemen Produk Kerudung</h2>
-    <a href="create.php" class="btn-add">Tambah Kerudung Baru</a>
-    <table>
-        <tr>
-            <th>Nama</th>
-            <th>Harga</th>
-            <th>Deskripsi</th>
-            <th>Aksi</th>
-        </tr>
-        <?php foreach ($products as $p): ?>
-        <tr>
-            <td><?= htmlspecialchars($p['nama']) ?></td>
-            <td><?= formatRupiah($p['harga']) ?></td>
-            <td><?= htmlspecialchars($p['deskripsi']) ?></td>
-            <td>
-                <a href="edit.php?id=<?= $p['id'] ?>" class="btn btn-edit">Edit</a>
-                <a href="dashboard.php?delete=<?= $p['id'] ?>" class="btn btn-del" onclick="return confirm('Hapus produk ini?')">Hapus</a>
-            </td>
-        </tr>
-        <?php endforeach; ?>
-    </table>
-</div>
+
+    <div class="announcement-bar">
+        <span class="arrow">&lt;</span>
+        <span class="promo-text">KOLEKSI S/S TERBARU</span>
+        <span class="arrow">&gt;</span>
+    </div>
+
+    <div class="brand-tabs-container">
+        <div class="brand-tab active">MALIKHA</div>
+        <div class="brand-tab">MALIKHA PRIVÉ</div>
+    </div>
+
+    <header class="main-header">
+        <div class="header-left">
+            <button class="hamburger-btn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+        
+        <div class="header-center">
+            <h1 class="main-logo">MALIKHA</h1>
+        </div>
+        
+        <div class="header-right">
+            <div class="search-box">
+                <input type="text" placeholder="Search">
+                <span class="icon">cari</span>
+            </div>
+            <span class="nav-icon">login</span>
+            <span class="nav-icon badge-cart">keranjang</span>
+        </div>
+    </header>
+
+    <section class="hero-section">
+        <div class="hero-image-wrapper">
+            <img src="https://images.unsplash.com/photo-1609357605129-26f69add5d6e?q=80&w=1200" alt="Malikha Hijab Banner">
+            <div class="hero-text-overlay">
+                <div class="hero-grid-text">
+                    <h2>BARU</h2>
+                    <h2>KOLEKSI</h2>
+                    <h2>GAYA MUSLIMAH '26</h2>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="main-content">
+        <div class="product-grid">
+            
+            <div class="product-card">
+                <div class="img-container">
+                    <img src="https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=400" alt="Hijab 1">
+                </div>
+                <div class="prod-details">
+                    <p class="prod-title">Malikha Pashmina Sutera</p>
+                    <p class="prod-price">Rp 199.000,00 IDR</p>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="img-container">
+                    <img src="https://images.unsplash.com/photo-1618220179428-22790b461013?q=80&w=400" alt="Hijab 2">
+                </div>
+                <div class="prod-details">
+                    <p class="prod-title">Malikha Pashmina Sutera</p>
+                    <p class="prod-price">Rp 199.000,00 IDR</p>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="img-container">
+                    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=400" alt="Hijab 3">
+                </div>
+                <div class="prod-details">
+                    <p class="prod-title">Malikha Pashmina Sutera</p>
+                    <p class="prod-price">Rp 199.000,00 IDR</p>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="img-container">
+                    <img src="https://images.unsplash.com/photo-1609357605129-26f69add5d6e?q=80&w=400" alt="Hijab 4">
+                </div>
+                <div class="prod-details">
+                    <p class="prod-title">Malikha Hijab Style</p>
+                    <p class="prod-price">Rp 199.000,00 IDR</p>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="img-container">
+                    <img src="https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=400" alt="Hijab 5">
+                </div>
+                <div class="prod-details">
+                    <p class="prod-title">Malikha Pashmina Sutera</p>
+                    <p class="prod-price">Rp 199.000,00 IDR</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <div class="free-shipping-popup">
+        <span>Free shipping</span>
+        <button class="close-popup">×</button>
+    </div>
+
+    <div class="gift-float">🎁</div>
+
+    <a href="https://wa.me/628123456789" class="whatsapp-float" target="_blank">💬</a>
+
 </body>
 </html>
-<?php
-// Fitur Hapus Langsung
-if (isset($_GET['delete'])) {
-    $stmt = $pdo->prepare("DELETE FROM products WHERE id = ?");
-    $stmt->execute([$_GET['delete']]);
-    header("Location: dashboard.php");
-}
-?>
