@@ -1,0 +1,1 @@
+console.log("Statis CV Siti Malikha Berhasil Dimuat.");

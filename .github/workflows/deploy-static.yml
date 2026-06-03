@@ -1,0 +1,12 @@
+name: Deploy Static CV
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy-static:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deployment Log
+        run: echo "Mengirim berkas halaman statis ke server di 47.128.217.200/cv"
