@@ -2,17 +2,24 @@ name: Deploy Dynamic App
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout Code
+      - name: Checkout Source Code
         uses: actions/checkout@v3
 
-      - name: Build and Push Docker Image
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+      - name: Build and Push Dynamic Image
         run: |
-          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "sitimalikha19" --password-stdin
-          docker build -t sitimalikha19/kerudung-app:latest -f Dockerfile.txt .
-          docker push sitimalikha19/kerudung-app:latest
+          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/kerudung-dynamic:latest -f Dockerfile .
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/kerudung-dynamic:latest
