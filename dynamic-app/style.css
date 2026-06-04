@@ -1,344 +1,41 @@
-/* --- RESET & BASIC STYLES --- */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Montserrat', sans-serif;
+/* style.css */
+:root {
+    --bg-workspace: #f9f8f6;
+    --bg-card: #ffffff;
+    --accent-brown: #8e7355;
+    --accent-brown-light: #b59f85;
+    --text-main: #2c2520;
+    --text-muted: #8a8073;
+    --border-color: #ededeb;
 }
 
-body {
-    background-color: #fff5f6; /* Latar belakang soft pink */
-    color: #4a3b3c; /* Warna teks maroon/cokelat gelap agar terbaca jelas */
-}
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+body { background-color: var(--bg-workspace); color: var(--text-main); display: flex; }
 
-a {
-    text-decoration: none;
-    color: inherit;
-}
+/* Sidebar */
+.sidebar { width: 260px; height: 100vh; background: #ffffff; border-right: 1px solid var(--border-color); position: fixed; padding: 30px 20px; display: flex; flex-direction: column; justify-content: space-between; }
+.sidebar-brand { font-size: 1.25rem; font-weight: 700; }
+.sidebar-brand span { color: var(--accent-brown); }
+.menu-group { list-style: none; margin-top: 40px; }
+.menu-item { margin-bottom: 8px; }
+.menu-item a { display: flex; align-items: center; gap: 12px; padding: 12px 15px; color: var(--text-muted); text-decoration: none; font-weight: 500; font-size: 0.95rem; border-radius: 8px; }
+.menu-item.active a, .menu-item a:hover { background: rgba(142, 115, 85, 0.05); color: var(--accent-brown); }
 
-/* --- TOP ANNOUNCEMENT BAR --- */
-.announcement-bar {
-    background-color: #f7cad0; /* Soft pink medium */
-    color: #6c4f52;
-    text-align: center;
-    padding: 8px 0;
-    font-size: 12px;
-    letter-spacing: 2px;
-    font-weight: 600;
-    text-transform: uppercase;
-}
+/* User Profile */
+.user-profile { display: flex; align-items: center; gap: 12px; padding-top: 20px; border-top: 1px solid var(--border-color); position: relative; }
+.user-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--accent-brown-light); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 0.9rem; }
+.btn-logout { position: absolute; right: 0; color: var(--text-muted); font-size: 1.1rem; text-decoration: none; }
+.btn-logout:hover { color: #c94a4a; }
 
-/* --- HEADER & NAVIGATION --- */
-header {
-    background-color: #ffffff;
-    border-bottom: 1px solid #f2d5da;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-}
-
-.header-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 5%;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.menu-toggle {
-    font-size: 20px;
-    cursor: pointer;
-}
-
-.logo {
-    font-size: 24px;
-    font-weight: 700;
-    letter-spacing: 4px;
-    color: #b37d83; /* Dusty Pink elegan untuk identitas brand */
-}
-
-.nav-menu {
-    display: flex;
-    list-style: none;
-    gap: 30px;
-    font-size: 13px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.nav-menu a:hover {
-    color: #b37d83;
-}
-
-.header-icons {
-    display: flex;
-    gap: 20px;
-    font-size: 18px;
-}
-
-/* --- HERO BANNER --- */
-.hero-section {
-    position: relative;
-    height: 70vh;
-    background: linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)), 
-                url('image/hijab1.jpg') no-repeat center center/cover;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    color: #ffffff;
-}
-
-.hero-content h1 {
-    font-size: 42px;
-    font-weight: 300;
-    letter-spacing: 5px;
-    margin-bottom: 10px;
-    text-transform: uppercase;
-}
-
-.hero-content p {
-    font-size: 16px;
-    letter-spacing: 3px;
-    margin-bottom: 25px;
-    font-weight: 300;
-}
-
-.btn-explore {
-    display: inline-block;
-    padding: 12px 35px;
-    background-color: #ffffff;
-    color: #4a3b3c;
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    border: 1px solid transparent;
-    transition: all 0.3s ease;
-}
-
-.btn-explore:hover {
-    background-color: transparent;
-    color: #ffffff;
-    border: 1px solid #ffffff;
-}
-
-/* --- SECTION TITLE --- */
-.section-title {
-    text-align: center;
-    margin: 50px 0 30px;
-}
-
-.section-title h2 {
-    font-size: 22px;
-    font-weight: 400;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: #6c4f52;
-    position: relative;
-    display: inline-block;
-    padding-bottom: 10px;
-}
-
-/* --- PRODUCT GRID --- */
-.product-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 5%;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 30px;
-}
-
-.product-card {
-    background-color: #ffffff;
-    border-radius: 4px;
-    overflow: hidden;
-    box-shadow: 0 4px 10px rgba(179, 125, 131, 0.1);
-    transition: transform 0.3s ease;
-    position: relative;
-}
-
-.product-card:hover {
-    transform: translateY(-5px);
-}
-
-.product-image {
-    width: 100%;
-    height: 320px;
-    object-fit: cover;
-}
-
-.badge-sale {
-    position: absolute;
-    top: 15px;
-    left: 15px;
-    background-color: #e8a598;
-    color: #ffffff;
-    padding: 4px 10px;
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    border-radius: 2px;
-}
-
-.product-info {
-    padding: 20px 15px;
-    text-align: center;
-}
-
-.product-name {
-    font-size: 14px;
-    font-weight: 600;
-    color: #4a3b3c;
-    margin-bottom: 8px;
-    letter-spacing: 0.5px;
-}
-
-.product-price {
-    font-size: 13px;
-}
-
-.price-regular {
-    text-decoration: line-through;
-    color: #a89294;
-    margin-right: 8px;
-}
-
-.price-sale {
-    color: #b37d83;
-    font-weight: 600;
-}
-
-/* --- CATEGORIES SECTION --- */
-.categories-grid {
-    max-width: 1200px;
-    margin: 40px auto 70px;
-    padding: 0 5%;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
-}
-
-.category-card {
-    position: relative;
-    height: 250px;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.category-card img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.5s ease;
-}
-
-.category-card:hover img {
-    transform: scale(1.05);
-}
-
-.category-overlay {
-    position: absolute;
-    inset: 0;
-    background: rgba(119, 76, 82, 0.35); /* Lapisan transparan merah muda kecokelatan */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: #ffffff;
-}
-
-.category-overlay h3 {
-    font-size: 18px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-bottom: 10px;
-}
-
-.btn-shop-cat {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    border-bottom: 1px solid #ffffff;
-    padding-bottom: 2px;
-    font-weight: 600;
-}
-
-/* --- FOOTER --- */
-footer {
-    background-color: #fceade; /* Krem pastel hangat */
-    border-top: 1px solid #f2d5da;
-    padding: 50px 5% 20px;
-}
-
-.footer-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 40px;
-    margin-bottom: 40px;
-}
-
-.footer-col h3 {
-    font-size: 14px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: #6c4f52;
-    margin-bottom: 20px;
-}
-
-.footer-col ul {
-    list-style: none;
-}
-
-.footer-col ul li {
-    margin-bottom: 12px;
-    font-size: 13px;
-}
-
-.footer-col ul li a:hover {
-    color: #b37d83;
-}
-
-.footer-col p {
-    font-size: 13px;
-    line-height: 1.6;
-}
-
-.copyright {
-    text-align: center;
-    font-size: 12px;
-    color: #a89294;
-    border-top: 1px solid #f2d5da;
-    padding-top: 20px;
-}
-
-/* --- WHATSAPP FLOATING BUTTON --- */
-.whatsapp-float {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    background-color: #25d366;
-    color: white;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 30px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    z-index: 1000;
-    transition: transform 0.2s ease;
-}
-
-.whatsapp-float:hover {
-    transform: scale(1.1);
-}
+/* Content */
+.main-content { margin-left: 260px; width: calc(100% - 260px); padding: 40px 50px; }
+.card-table { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 25px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+.data-table { width: 100%; border-collapse: collapse; text-align: left; }
+.data-table th { padding: 16px 20px; color: var(--text-muted); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; border-bottom: 1px solid var(--border-color); }
+.data-table td { padding: 18px 20px; border-bottom: 1px solid var(--border-color); font-size: 0.9rem; }
+.badge-role { padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; }
+.badge-admin { background: #fdf5ea; color: #e6a23c; }
+.badge-kasir { background: #eef5fe; color: #409eff; }
+.action-links a { color: var(--text-muted); margin-right: 12px; font-size: 1.1rem; text-decoration: none; }
+.action-links a:hover { color: var(--text-main); }
+.btn-tambah { background: var(--accent-brown); color: white; text-decoration: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; font-size: 0.9rem; }
