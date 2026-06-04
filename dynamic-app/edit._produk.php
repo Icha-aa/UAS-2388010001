@@ -1,31 +1,32 @@
 <?php
-// Hubungkan ke database
+session_start();
 include 'src/db.php';
 
-// 1. Ambil ID dari URL
+// Ambil ID dari URL
 $id = $_GET['id'];
 
-// 2. Ambil data produk berdasarkan ID
-$stmt = $pdo->prepare("SELECT * FROM products WHERE id = ?");
+// Ambil data user lama
+$stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
 $stmt->execute([$id]);
-$produk = $stmt->fetch();
+$user = $stmt->fetch();
 
-// 3. Proses Update Data
-if (isset($_POST['update'])) {
-    $kode = $_POST['kode_produk'];
-    $nama = $_POST['nama_produk'];
-    $kategori = $_POST['kategori'];
-    $harga = $_POST['harga_jual'];
-    $stok = $_POST['stok'];
-
-    $sql = "UPDATE products SET kode_produk=?, nama_produk=?, kategori=?, harga_jual=?, stok=? WHERE id=?";
-    $stmt_update = $pdo->prepare($sql);
+// Proses simpan perubahan
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $nama = $_POST['nama'];
+    $username = $_POST['username'];
+    $role = $_POST['role'];
     
-    if ($stmt_update->execute([$kode, $nama, $kategori, $harga, $stok, $id])) {
-        echo "<script>alert('Data produk berhasil diperbarui!'); window.location.href='produk.php';</script>";
+    if (!empty($_POST['password'])) {
+        $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+        $sql = "UPDATE users SET nama = ?, username = ?, role = ?, password = ? WHERE id = ?";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$nama, $username, $role, $password, $id]);
     } else {
-        echo "<script>alert('Gagal memperbarui data.');</script>";
+        $sql = "UPDATE users SET nama = ?, username = ?, role = ? WHERE id = ?";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$nama, $username, $role, $id]);
     }
+    header("Location: dashboard.php");
 }
 ?>
 
@@ -33,33 +34,42 @@ if (isset($_POST['update'])) {
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Edit Produk - CoreSystem</title>
+    <title>Edit User - MALIKHA HOUSE</title>
     <link rel="stylesheet" href="style.css">
-    <style>
-        .form-card { background: var(--bg-card); padding: 30px; border-radius: 12px; border: 1px solid var(--border-color); max-width: 600px; }
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 0.9rem; }
-        .form-group input { width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; }
-        .btn-submit { background: var(--accent-brown); color: white; padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; }
-    </style>
 </head>
 <body>
-    <div class="sidebar">
-        <ul class="menu-group">
-            <li class="menu-item"><a href="dashboard.php"><i class="fa-solid fa-chart-pie"></i> Dashboard</a></li>
-            <li class="menu-item"><a href="produk.php"><i class="fa-solid fa-box"></i> Daftar Produk</a></li>
-        </ul>
-    </div>
     <div class="main-content">
-        <h2>Edit Produk</h2>
-        <div class="form-card">
+        <div class="form-section">
             <form method="POST">
-                <div class="form-group"><label>Kode Produk</label><input type="text" name="kode_produk" value="<?php echo $produk['kode_produk']; ?>" required></div>
-                <div class="form-group"><label>Nama Produk</label><input type="text" name="nama_produk" value="<?php echo $produk['nama_produk']; ?>" required></div>
-                <div class="form-group"><label>Kategori</label><input type="text" name="kategori" value="<?php echo $produk['kategori']; ?>" required></div>
-                <div class="form-group"><label>Harga Jual</label><input type="number" name="harga_jual" value="<?php echo $produk['harga_jual']; ?>" required></div>
-                <div class="form-group"><label>Stok</label><input type="number" name="stok" value="<?php echo $produk['stok']; ?>" required></div>
-                <button type="submit" name="update" class="btn-submit">Simpan Perubahan</button>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>ID Pengguna</label>
+                        <input type="text" class="form-control" value="<?php echo $user['id']; ?>" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Hak Akses</label>
+                        <select name="role" class="form-control">
+                            <option value="kasir" <?php if($user['role']=='kasir') echo 'selected'; ?>>Kasir</option>
+                            <option value="admin" <?php if($user['role']=='admin') echo 'selected'; ?>>Admin</option>
+                        </select>
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Nama Petugas</label>
+                        <input type="text" name="nama" class="form-control" value="<?php echo $user['nama']; ?>" required>
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Username</label>
+                        <input type="text" name="username" class="form-control" value="<?php echo $user['username']; ?>" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password Baru</label>
+                        <input type="password" name="password" class="form-control" placeholder="Isi jika ingin ganti">
+                    </div>
+                </div>
+                <div class="btn-group-form">
+                    <a href="dashboard.php" class="btn-cancel">Kembali</a>
+                    <button type="submit" class="btn-update">Perbarui produk</button>
+                </div>
             </form>
         </div>
     </div>
