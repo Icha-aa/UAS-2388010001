@@ -6,20 +6,20 @@ if (isset($_POST['login'])) {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE username = ?");
-    $stmt->execute([$username]);
-    $user = $stmt->fetch();
+   // Cek user di database
+$stmt = $pdo->prepare("SELECT * FROM users WHERE username = ?");
+$stmt->execute([$username]);
+$user = $stmt->fetch();
 
-    // Sesuaikan: jika di DB belum di-hash, pakai $password == $user['password']
-    // Jika sudah di-hash, pakai password_verify($password, $user['password'])
-    if ($user && ($password == $user['password'])) {
-        $_SESSION['login'] = true;
-        $_SESSION['user'] = $user['nama_petugas'];
-        header("Location: dashboard.php");
-        exit;
-    } else {
-        $error = "Username atau Password salah!";
-    }
+// PENTING: Gunakan password_verify jika password di database sudah di-hash
+if ($user && password_verify($password, $user['password'])) {
+    $_SESSION['login'] = true;
+    $_SESSION['user'] = $user['nama_petugas'];
+    header("Location: dashboard.php");
+    exit;
+} else {
+    $error = "Username atau Password salah!";
+}
 }
 ?>
 
