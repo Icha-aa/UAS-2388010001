@@ -1,31 +1,35 @@
-<?php include 'src/db.php'; 
-if (isset($_GET['hapus_id'])) {
-    $pdo->prepare("DELETE FROM products WHERE id = ?")->execute([$_GET['hapus_id']]);
-    header("Location: produk.php");
-}
-$list_produk = $pdo->query("SELECT * FROM products ORDER BY id DESC")->fetchAll();
+<?php
+session_start();
+include 'src/db.php';
+// ... (tambahkan logika query data produk di sini) ...
 ?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Daftar Produk - CoreSystem</title>
+    <title>Produk - Malikha House</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <div class="sidebar">
+        <div class="sidebar-brand">Malikha<span>House</span></div>
+        <ul class="menu-group">
+            <li class="menu-item"><a href="dashboard.php">Dashboard</a></li>
+            <li class="menu-item active"><a href="produk.php">Daftar Produk</a></li>
+        </ul>
+        <div class="user-profile">
+            <div class="user-avatar"><?php echo substr($_SESSION['user'], 0, 2); ?></div>
+            <span><?php echo $_SESSION['user']; ?></span>
         </div>
+    </div>
+
     <div class="main-content">
-        <div class="header-section">
-            <h2>Daftar Produk</h2>
-            <a href="tambah_produk.php" class="btn-tambah">Tambah Produk</a>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2>Manajemen Daftar Produk</h2>
+            <a href="tambah_produk.php" class="btn-tambah">+ Tambah Produk</a>
         </div>
         <div class="card-table">
-            <table class="data-table">
-                </table>
-        </div>
+            </div>
     </div>
 </body>
 </html>
