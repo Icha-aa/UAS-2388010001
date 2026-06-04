@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Siti Malikha Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+</head>
+<body>
+
+    <nav>
+        <a href="#hero" class="logo">Siti Malikha<span>.</span></a>
+        <div class="nav-links">
+            <a href="#hero">Home</a>
+            <a href="#featured-projects">Featured</a>
+            <a href="#detail-projek">Projek</a>
+            <a href="#services">What I Do</a>
+        </div>
+    </nav>
+
+    <section id="hero" class="reveal">
+        <div class="hero-text">
+            <h1>Siti Malikha<br><span>IT Student</span></h1>
+            
+            <div class="hero-socials">
+                <a href="mailto:sitimalikha.info@gmail.com" class="social-link">
+                    <i class="fa-solid fa-envelope"></i> Email
+                </a>
+                <a href="https://www.linkedin.com/in/siti-malikha-b09527334/" target="_blank" class="social-link">
+                    <i class="fa-brands fa-linkedin-in"></i> LinkedIn
+                </a>
+                <a href="https://github.com/Icha-aa/" target="_blank" class="social-link">
+                    <i class="fa-brands fa-github"></i> GitHub
+                </a>
+                <a href="https://www.instagram.com/__thismeica" target="_blank" class="social-link">
+                    <i class="fa-brands fa-instagram"></i> Instagram
+                </a>
+            </div>
+
+            <p>Saya adalah mahasiswa semester 6 jurusan Informatika di UIN SSC 
+                yang memiliki ketertarikan kuat pada efisiensi kerja dan pengelolaan data.
+                Saat ini, saya aktif membagi waktu sebagai Freelance Admin, di mana saya mengasah
+                keterampilan dalam komunikasi, manajemen waktu, serta ketelitian tingkat tinggi. 
+                Kombinasi latar belakang pendidikan di bidang teknologi dan pengalaman praktis sebagai admin membentuk
+                pola pikir saya yang analitis sekaligus terorganisasi, siap untuk menghadapi tantangan profesional di industri digital.</p>
+            <a href="#featured-projects" class="btn">see more</a>
+        </div>
+        
+        <div class="photo-box-wrapper">
+            <div class="photo-box">
+                <img src="foto_profil.jpg" alt="MALIKHA">
+            </div>
+        </div>
+    </section>
+
+    <section id="featured-projects" class="reveal">
+        <h2 class="section-title">activity history</h2>
+        
+        <div class="slider-container">
+            <div class="slides" id="slider">
+                
+                <div class="slide">
+                    <div class="slide-img-area">
+                        <img src="projek1.jpg" alt="BAZNAS" class="slide-img">
+                    </div>
+                    <div class="slide-content">
+                        <span class="tag">Awarde</span>
+                        <h3>Beasiswa Cendekia Baznas UIN SSC 2025-2027</h3>
+                        <p>Terpilih sebagai Penerima Beasiswa BAZNAS 2025-2027
+                            merupakan bukti komitmen saya terhadap keunggulan akademik dan integritas personal. 
+                            Melalui program ini, saya dibentuk menjadi pribadi yang tidak hanya focus pada pencapaian individu, 
+                            tetapi juga memiliki kepekaan sosial, manajemen waktu yang solid, serta motivasi tinggi untuk terus bertumbuh 
+                            dan berdampak.</p>
+                        <button class="btn" onclick="scrollToProjek()">Details activity</button>
+                    </div>
+                </div>
+
+                <div class="slide">
+                    <div class="slide-img-area">
+                        <img src="projek2.jpg" alt="Fintech Dashboard" class="slide-img">
+                    </div>
+                    <div class="slide-content">
+                        <span class="tag">Work Activity</span>
+                        <h3>Freelance of PT. Aromatika Nusantara</h3>
+                        <p>Bertanggung jawab dalam mengelola operasional harian Care Unit dengan fokus pada sinkronisasi kerja
+                            antara tim sales, pengelolaan dashboard internal, dan akurasi input data. Berperan aktif dalam menjaga
+                            dan meningkatkan customer happiness melalui pelayanan yang solutif dan responsif.</p>
+                        <button class="btn" onclick="scrollToProjek()">Details activity</button>
+                    </div>
+                </div>
+
+                <div class="slide">
+                    <div class="slide-img-area">
+                        <img src="projek3.jpg" alt="Fintech Dashboard" class="slide-img">
+                    </div>
+                    <div class="slide-content">
+                        <span class="tag">Project Tugas kuliah</span>
+                        <h3>mengatur jobdesk projek - eksekusi project mandiri</h3>
+                        <p>Berpengalaman dalam mengelola proyek kuliah skala besar, 
+                            mulai dari pembagian tugas tim yang merata hingga kontrol lini masa 
+                            untuk memastikan target selesai tepat waktu. Selain sisi manajemen, 
+                            saya juga memiliki keahlian teknis praktis dalam pengembangan website, implementasi proyek 
+                            berbasis Internet of Things (IoT), serta berperan sebagai tester aplikasi 
+                            untuk menjamin kualitas dan fungsionalitas sistem yang dibangun.</p>
+                        <button class="btn" onclick="scrollToProjek()">Details activity</button>
+                    </div>
+                </div>
+
+                <div class="slide">
+                    <div class="slide-img-area">
+                        <img src="projek4.jpg" alt="Fintech Dashboard" class="slide-img">
+                    </div>
+                    <div class="slide-content">
+                        <span class="tag">Organisasi</span>
+                        <h3>Bendahara umum 1 HIMAFOR 2024-2025</h3>
+                        <p>Dipercaya sebagai Bendahara Umum 1 HIMAFOR periode 2024–2025,
+                            saya bertanggung jawab penuh atas manajemen keuangan organisasi
+                            selama satu periode penuh. Peran ini mencakup otorisasi (acc) 
+                            arus kas masuk dan keluar, penyusunan laporan keuangan yang akuntabel, 
+                            serta manajemen tim internal keuangan. Selain itu, saya bertindak 
+                            sebagai penghubung strategis untuk menyelaraskan urusan finansial antara 
+                            HIMAFOR dengan bagian keuangan pihak fakultas.</p>
+                        <button class="btn" onclick="scrollToProjek()">Details activity</button>
+                    </div>
+                </div>
+            </div>
+
+            <button class="slide-btn prev" onclick="moveSlide(-1)"><i class="fas fa-chevron-left"></i></button>
+            <button class="slide-btn next" onclick="moveSlide(1)"><i class="fas fa-chevron-right"></i></button>
+        </div>
+    </section>
+
+    <section id="detail-projek" class="reveal">
+        <h2 class="section-title">Details Activity</h2>
+        
+        <div class="scroll-container">
+            
+            <div class="project-grid-card">
+                <div class="project-card-img">
+                    <img src="DAMAGE.jpg" alt="Organisasi Event">
+                </div>
+                <div class="project-card-info">
+                    <div class="project-card-meta">
+                        <span class="project-card-badge">Organisasi</span>
+                        <span class="project-card-date">2024</span>
+                    </div>
+                    <h3>DAMAGE 2024</h3>
+                    <p class="project-subtitle">Delegasi DEMA mengabdi 2024 di desa cikaracak, majalengka</p>
+                    <p>Selama program, saya aktif melakukan pendekatan sosial melalui wawancara langsung
+                        dengan warga untuk mengenal lingkungan setempat, mengajar mengaji, serta menyelenggarakan 
+                        kegiatan edukatif yang interaktif bersama anak-anak sekolah. Selain itu, saya juga berkontribusi 
+                        dalam menyukseskan acara Pentas Seni (Pensi) sebagai malam puncak kegiatan pengabdian tersebut.</p>
+                </div>
+            </div>
+
+            <div class="project-grid-card">
+                <div class="project-card-img">
+                    <img src="1000.jpg" alt="Coding Task">
+                </div>
+                <div class="project-card-info">
+                    <div class="project-card-meta">
+                        <span class="project-card-badge">BAZNAS</span>
+                        <span class="project-card-date">2025</span>
+                    </div>
+                    <h3>1000 cahaya ramadhan 2026</h3>
+                    <p>Berpartisipasi aktif dalam kegiatan '1000 Cahaya Ramadhan'
+                        yang diselenggarakan oleh BAZNAS UIN SSC di Panti Asuhan Al-Kahfi.
+                        Melalui program ini, saya terlibat langsung dalam aksi sosial dan
+                        berbagi kebahagiaan bersama anak-anak panti guna menebar manfaat di bulan suci.</p>
+                </div>
+            </div>
+
+            <div class="project-grid-card">
+                <div class="project-card-img">
+                    <img src="pekerjaan.jpeg" alt="Work Project">
+                </div>
+                <div class="project-card-info">
+                    <div class="project-card-meta">
+                        <span class="project-card-badge">Pekerjaan</span>
+                        <span class="project-card-date">3 Bulan</span>
+                    </div>
+                    <h3>FREELANCE ADMIN</h3>
+                    <p>Menjalankan peran sebagai Freelance Admin dengan waktu kerja malam hari, 
+                        saya berhasil membuktikan produktivitas tinggi dengan mencetak total penjualan mencapai 
+                        lebih dari Rp25 juta dalam tiga bulan pertama. Berdasarkan data objektif dari 
+                        sistem dashboard, performa ini membawa saya meraih predikat sebagai Admin dengan Kinerja Terbaik 
+                        selama tiga bulan berturut-turut.</p>
+                </div>
+            </div>
+
+            <div class="project-grid-card">
+                <div class="project-card-img">
+                    <img src="ppl.jpeg" alt="Fullstack Project">
+                </div>
+                <div class="project-card-info">
+                    <div class="project-card-meta">
+                        <span class="project-card-badge">Project Kuliah</span>
+                        <span class="project-card-date">2026</span>
+                        
+                    </div>
+                    <h3>System Architecture & Design</h3>
+                    <p>Bertanggung jawab menyusun rancangan arsitektur sistem dengan membuat diagram UML secara komprehensif menggunakan Draw.io untuk kebutuhan dokumentasi teknis proyek kelompok Pengembangan Perangkat Lunak</p>
+                </div>
+            </div>
+
+            <div class="project-grid-card">
+                <div class="project-card-img">
+                    <img src="FIG.jpg" alt="Fullstack Project">
+                </div>
+                <div class="project-card-info">
+                    <div class="project-card-meta">
+                        <span class="project-card-badge">Project Kuliah</span>
+                        <span class="project-card-date">semester 3&5</span>
+                    </div>
+                    <h3>Desain antarmuka aplikasi dan website</h3>
+                    <p class="project-subtitle">Tugas Akhir kelompok</p>
+                    <p>Berkolaborasi dalam tim untuk merancang desain 
+                        antarmuka dan pengalaman pengguna (UI/UX)
+                        menggunakan Figma sebagai bagian dari proyek tugas perkuliahan. 
+                        Bertanggung jawab dalam menyelaraskan ide kelompok ke dalam bentuk alur pengguna (user flow), 
+                        penyusunan tata letak (wireframing), hingga pengembangan prototipe interaktif (high-fidelity prototype).</p>
+                </div>
+            </div>
+
+            <div class="project-grid-card">
+                <div class="project-card-img">
+                    <img src="AWS.jpeg" alt="Mobile UI">
+                </div>
+                <div class="project-card-info">
+                    <div class="project-card-meta">
+                        <span class="project-card-badge">Project Kuliah</span>
+                        <span class="project-card-date">semester 6</span>
+                    </div>
+                    <h3>Independent Full-Stack Web Development</h3>
+                    <p class="project-subtitle"></p>
+                    <p>menyelesaikan project pengembangan website full-stack secara mandiri, mulai dari perancangan 
+                        antarmuka menggunakan HTML, CSS, dan JavaScript, pengelolaan basis data menggunakan MySQL,
+                        hingga proses deployment agar sistem dapat diakses secara publik.</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="services" class="reveal">
+        <h2 class="section-title">What I Do</h2>
+        <div class="grid-container">
+            
+            <div class="card">
+                <h3>Public Speaking</h3>
+                <p>Mampu berkomunikasi di depan publik secara jelas, persuasif, dan adaptif untuk menyampaikan ide, memimpin forum, serta menjembatani komunikasi antarpihak.</p>
+            </div>
+
+            <div class="card">
+                <h3>Management Team</h3>
+                <p>Berpengalaman memimpin dan mengorganisasi tim, mendelegasikan tugas secara efektif, serta menjaga produktivitas kelompok demi mencapai target bersama.</p>
+            </div>
+
+            <div class="card">
+                <h3>Rapid Learning</h3>
+                <p>adaptif dalam menguasai konsep baru, keterampilan teknis, maupun pengetahuan akademik dan non-akademik.</p>
+            </div>
+
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 MALIKHA. Built with elegance.</p>
+    </footer>
+
+    <script>
+        // --- SCROLL AUTOMATIC REVEAL ANIMATION ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { 
+            // Nilai threshold diturunkan menjadi 0.05 agar animasi langsung aktif begitu ujung elemen masuk layar
+            threshold: 0.05 
+        });
+
+        document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+
+        // --- HERO SLIDESHOW CONTROLLER ---
+        let currentSlide = 0;
+        const slider = document.getElementById('slider');
+        const totalSlides = document.querySelectorAll('.slide').length;
+
+        function moveSlide(direction) {
+            currentSlide += direction;
+            if (currentSlide >= totalSlides) currentSlide = 0;
+            if (currentSlide < 0) currentSlide = totalSlides - 1;
+            slider.style.transform = `translateX(-${currentSlide * 100}%)`;
+        }
+
+        // --- VIEW CASE AUTOMATIC SMOOTH SCROLL FUNCTION ---
+        function scrollToProjek() {
+            const targetSection = document.getElementById('detail-projek');
+            targetSection.scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
