@@ -21,21 +21,27 @@ body { background-color: var(--bg-workspace); color: var(--text-main); display: 
 .menu-item a { display: flex; align-items: center; gap: 12px; padding: 12px 15px; color: var(--text-muted); text-decoration: none; font-weight: 500; font-size: 0.95rem; border-radius: 8px; }
 .menu-item.active a, .menu-item a:hover { background: rgba(142, 115, 85, 0.05); color: var(--accent-brown); }
 
-/* User Profile */
+/* User Profile di Sidebar Bawah */
 .user-profile { display: flex; align-items: center; gap: 12px; padding-top: 20px; border-top: 1px solid var(--border-color); position: relative; }
 .user-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--accent-brown-light); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 0.9rem; }
 .btn-logout { position: absolute; right: 0; color: var(--text-muted); font-size: 1.1rem; text-decoration: none; }
-.btn-logout:hover { color: #c94a4a; }
 
-/* Content */
+/* Konten Utama */
 .main-content { margin-left: 260px; width: calc(100% - 260px); padding: 40px 50px; }
-.card-table { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 25px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+
+/* Kartu Tabel & Form */
+.card-table, .form-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 25px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
 .data-table { width: 100%; border-collapse: collapse; text-align: left; }
 .data-table th { padding: 16px 20px; color: var(--text-muted); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; border-bottom: 1px solid var(--border-color); }
 .data-table td { padding: 18px 20px; border-bottom: 1px solid var(--border-color); font-size: 0.9rem; }
+
+/* Tombol & Badge */
+.btn-tambah, .btn-submit { background: var(--accent-brown); color: white; text-decoration: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; font-size: 0.9rem; border: none; cursor: pointer; }
 .badge-role { padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; }
 .badge-admin { background: #fdf5ea; color: #e6a23c; }
 .badge-kasir { background: #eef5fe; color: #409eff; }
-.action-links a { color: var(--text-muted); margin-right: 12px; font-size: 1.1rem; text-decoration: none; }
-.action-links a:hover { color: var(--text-main); }
-.btn-tambah { background: var(--accent-brown); color: white; text-decoration: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; font-size: 0.9rem; }
+
+/* Form Input */
+.form-group { margin-bottom: 15px; }
+.form-group label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 0.9rem; }
+.form-group input { width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; }
