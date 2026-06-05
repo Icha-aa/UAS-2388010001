@@ -13,11 +13,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($password === $konfirmasi) {
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
         
-        $stmt = $pdo->prepare("INSERT INTO users (nama, username, role, password) VALUES (?, ?, ?, ?)");
-        $stmt->execute([$nama, $username, $role, $hashed_password]);
-        
-        echo "<script>alert('User berhasil ditambahkan!'); window.location='manajemen_user.php';</script>";
-    } else {
+      // Pastikan variabel diawali dengan tanda dollar ($)
+$stmt = $pdo->prepare("INSERT INTO users (nama_petugas, username, role, password) VALUES (?, ?, ?, ?)");
+$stmt->execute([$nama, $username, $role, $hashed_password]);
+
+echo "<script>alert('User berhasil ditambahkan!'); window.location='manajemen_user.php';</script>";
+} else {
         echo "<script>alert('Password tidak cocok!');</script>";
     }
 }
@@ -27,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Manajemen User-MALIKHA HOUSE</title>
+    <title>Manajemen User-MALIKHA</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -63,9 +64,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <h2>Tambah Pengguna Baru</h2>
         <div class="form-section">
             <form method="POST">
-                <div class="form-group">
+                <<div class="form-group full-width">
                     <label>Nama Petugas</label>
-                    <input type="text" name="nama_petugas" class="form-control" required>
+                    <input type="text" name="nama_petugas" class="form-control" placeholder="Contoh: Siti Malikha" required>
                 </div>
                 <div class="form-group">
                     <label>Username</label>
