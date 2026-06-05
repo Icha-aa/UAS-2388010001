@@ -104,32 +104,31 @@ $produk_terlaris = [
                 <div class="card-icon"><i class="fa-solid fa-users-gear"></i></div>
             </div>
         </div>
-    </div>
 
-    <div class="data-section" style="margin-top: 30px; background: #ffffff; padding: 30px; border-radius: 12px; border: 1px solid var(--border-color);">
-    <h3 style="margin-bottom: 20px;">Produk Terlaris Bulan Ini</h3>
-    <table style="width: 100%; border-collapse: collapse;">
-        <thead>
-            <tr style="text-align: left; color: var(--text-muted); font-size: 0.85rem;">
-                <th style="padding: 12px 0; border-bottom: 1px solid var(--border-color);">Nama Produk</th>
-                <th style="padding: 12px 0; border-bottom: 1px solid var(--border-color);">Jumlah Terjual</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($produk_terlaris as $item): ?>
-            <tr>
-                <td style="padding: 15px 0; border-bottom: 1px solid var(--border-color); font-weight: 500;">
-                    <?php echo $item['nama_produk']; ?>
-                </td>
-                <td style="padding: 15px 0; border-bottom: 1px solid var(--border-color);">
-                    <span style="background: #f0ede9; color: var(--accent-brown); padding: 4px 10px; border-radius: 6px; font-weight: 600;">
-                        <?php echo $item['total_terjual']; ?> Pcs
-                    </span>
-                </td>
-            </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
-</div>
-</body>
+        <div class="data-section" style="margin-top: 30px; background: #ffffff; padding: 30px; border-radius: 12px; border: 1px solid var(--border-color);">
+            <h3 style="margin-bottom: 20px;">Produk Terlaris Bulan Ini</h3>
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="text-align: left; color: var(--text-muted); font-size: 0.85rem;">
+                        <th style="padding: 12px 0; border-bottom: 1px solid var(--border-color);">Nama Produk</th>
+                        <th style="padding: 12px 0; border-bottom: 1px solid var(--border-color);">Jumlah Terjual</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($produk_terlaris as $item): ?>
+                    <tr>
+                        <td style="padding: 15px 0; border-bottom: 1px solid var(--border-color); font-weight: 500;">
+                            <?php echo $item['nama_produk']; ?>
+                        </td>
+                        <td style="padding: 15px 0; border-bottom: 1px solid var(--border-color);">
+                            <span style="background: #f0ede9; color: var(--accent-brown); padding: 4px 10px; border-radius: 6px; font-weight: 600;">
+                                <?php echo $item['total_terjual']; ?> Pcs
+                            </span>
+                        </td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div> </body>
 </html>
