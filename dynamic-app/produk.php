@@ -95,7 +95,7 @@ $inisial = strtoupper(substr($nama_user, 0, 2));
     <div class="main-content">
         <div class="header-area">
             <div class="header-title">
-                <h2>Selamat Datang di CoreSystem</h2>
+                <h2>Selamat Datang di MALIKHA HOUSE</h2>
                 <p>Berikut adalah ringkasan inventaris etalase jilbab saat ini.</p>
             </div>
             <a href="tambah_produk.php" class="btn-tambah"><i class="fa-solid fa-plus"></i> Tambah Produk</a>
