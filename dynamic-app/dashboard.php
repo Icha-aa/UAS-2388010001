@@ -4,15 +4,29 @@ require_once 'src/db.php';
 require_once 'src/auth.php';
 
 // Proteksi halaman: Cek apakah user sudah login
-// checkLogin(); // Contoh fungsi dari auth.php
+// checkLogin(); // Aktifkan jika fungsi ini ada di auth.php
 
-// 1. Ambil Data Summary
-$total_produk = mysqli_query($conn, "SELECT COUNT(*) as total FROM produk")->fetch_assoc()['total'];
-$total_stok = mysqli_query($conn, "SELECT SUM(stok) as total FROM produk")->fetch_assoc()['total'];
-$total_petugas = mysqli_query($conn, "SELECT COUNT(*) as total FROM users")->fetch_assoc()['total'];
+try {
+    // 1. Ambil Data Summary menggunakan PDO
+    // Total Produk
+    $stmt_produk = $pdo->query("SELECT COUNT(*) as total FROM produk");
+    $total_produk = $stmt_produk->fetch()['total'] ?? 0;
 
-// 2. Ambil Data User untuk Tabel
-$query_users = mysqli_query($conn, "SELECT * FROM users ORDER BY id ASC");
+    // Total Stok Gudang
+    $stmt_stok = $pdo->query("SELECT SUM(stok) as total FROM produk");
+    $total_stok = $stmt_stok->fetch()['total'] ?? 0;
+
+    // Total Petugas Terdaftar
+    $stmt_petugas = $pdo->query("SELECT COUNT(*) as total FROM users");
+    $total_petugas = $stmt_petugas->fetch()['total'] ?? 0;
+
+    // 2. Ambil Data User untuk Tabel
+    $query_users = $pdo->query("SELECT * FROM users ORDER BY id ASC");
+    $list_users = $query_users->fetchAll();
+
+} catch (PDOException $e) {
+    die("Gagal mengambil data dari database: " . $e->getMessage());
+}
 
 // 3. Data User Login (diambil dari session)
 $nama_user = $_SESSION['nama'] ?? 'Siti Admin';
@@ -41,7 +55,7 @@ $inisial = strtoupper(substr($nama_user, 0, 2));
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
         body { background-color: var(--bg-workspace); color: var(--text-main); display: flex; }
         
-        /* Sidebar */
+        /* Sidebar Styling */
         .sidebar { width: 260px; height: 100vh; background: #ffffff; border-right: 1px solid var(--border-color); position: fixed; padding: 30px 20px; display: flex; flex-direction: column; justify-content: space-between; }
         .sidebar-brand { font-size: 1.25rem; font-weight: 700; margin-bottom: 40px; padding-left: 10px; }
         .sidebar-brand span { color: var(--accent-brown); }
@@ -71,7 +85,7 @@ $inisial = strtoupper(substr($nama_user, 0, 2));
         .section-header h3 { font-size: 1.15rem; font-weight: 700; }
         .btn-tambah { background: var(--accent-brown); color: white; text-decoration: none; padding: 10px 20px; border-radius: 6px; font-size: 0.9rem; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; }
         
-        /* Table */
+        /* Table Styling */
         table { width: 100%; border-collapse: collapse; text-align: left; }
         th { font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; padding-bottom: 15px; border-bottom: 1px solid var(--border-color); }
         td { padding: 18px 0; border-bottom: 1px solid var(--border-color); font-size: 0.95rem; }
@@ -94,7 +108,7 @@ $inisial = strtoupper(substr($nama_user, 0, 2));
             </ul>
         </div>
         <div class="user-profile">
-            <div class="user-avatar"><?= $inisial ?></div>
+            <div class="user-avatar"><?= htmlspecialchars($inisial) ?></div>
             <div>
                 <h4 style="font-size: 0.9rem;"><?= htmlspecialchars($nama_user) ?></h4>
                 <span style="font-size: 0.75rem; color: var(--text-muted);"><?= htmlspecialchars($role_user) ?></span>
@@ -140,24 +154,30 @@ $inisial = strtoupper(substr($nama_user, 0, 2));
                     </tr>
                 </thead>
                 <tbody>
-                    <?php while($row = mysqli_fetch_assoc($query_users)): ?>
-                    <tr>
-                        <td><?= $row['id'] ?></td>
-                        <td><strong><?= htmlspecialchars($row['nama_petugas'] ?? $row['nama']) ?></strong></td>
-                        <td><?= htmlspecialchars($row['username']) ?></td>
-                        <td>
-                            <span class="badge <?= $row['role'] == 'admin' ? 'badge-admin' : 'badge-kasir' ?>">
-                                <?= $row['role'] ?>
-                            </span>
-                        </td>
-                        <td class="actions-cell">
-                            <a href="edit_user.php?id=<?= $row['id'] ?>"><i class="fa-regular fa-pen-to-square"></i></a>
-                            <a href="hapus_user.php?id=<?= $row['id'] ?>" onclick="return confirm('Hapus user ini?')">
-                                <i class="fa-regular fa-trash-can"></i>
-                            </a>
-                        </td>
-                    </tr>
-                    <?php endwhile; ?>
+                    <?php if (count($list_users) > 0): ?>
+                        <?php foreach ($list_users as $row): ?>
+                        <tr>
+                            <td><?= $row['id'] ?></td>
+                            <td><strong><?= htmlspecialchars($row['nama_petugas'] ?? $row['nama'] ?? '') ?></strong></td>
+                            <td><?= htmlspecialchars($row['username']) ?></td>
+                            <td>
+                                <span class="badge <?= ($row['role'] ?? '') == 'admin' ? 'badge-admin' : 'badge-kasir' ?>">
+                                    <?= htmlspecialchars($row['role'] ?? 'kasir') ?>
+                                </span>
+                            </td>
+                            <td class="actions-cell">
+                                <a href="edit_user.php?id=<?= $row['id'] ?>"><i class="fa-regular fa-pen-to-square"></i></a>
+                                <a href="hapus_user.php?id=<?= $row['id'] ?>" onclick="return confirm('Hapus user ini?')">
+                                    <i class="fa-regular fa-trash-can"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <tr>
+                            <td colspan="5" style="text-align: center; color: var(--text-muted);">Belum ada data user.</td>
+                        </tr>
+                    <?php endif; ?>
                 </tbody>
             </table>
         </div>
