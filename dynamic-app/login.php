@@ -40,11 +40,11 @@ if ($user && password_verify($password, $user['password'])) {
         
         <form method="POST">
             <div class="form-group" style="margin-bottom: 15px;">
-                <label style="display: block; margin-bottom: 5px; font-weight: 600;">Username</label>
+                <label style="display: block; margin-bottom: 5px; font-weight: 600;">Username (admin)</label>
                 <input type="text" name="username" required style="width: 100%; padding: 12px; border: 1px solid #ededeb; border-radius: 8px;">
             </div>
             <div class="form-group" style="margin-bottom: 20px;">
-                <label style="display: block; margin-bottom: 5px; font-weight: 600;">Password</label>
+                <label style="display: block; margin-bottom: 5px; font-weight: 600;">Password(12345)</label>
                 <input type="password" name="password" required style="width: 100%; padding: 12px; border: 1px solid #ededeb; border-radius: 8px;">
             </div>
             <button type="submit" name="login" style="width: 100%; background: #8e7355; color: white; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">Masuk Sistem</button>

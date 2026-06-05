@@ -42,12 +42,26 @@ try {
 </head>
 <body>
     <div class="sidebar">
-        <div class="sidebar-brand">Malikha<span>House</span></div>
-        <ul style="list-style: none;">
-            <li class="menu-item"><a href="dashboard.php"><i class="fa-solid fa-chart-pie"></i> Dashboard</a></li>
-            <li class="menu-item active"><a href="produk.php"><i class="fa-solid fa-box"></i> Daftar Produk</a></li>
-        </ul>
+        <div>
+            <div class="sidebar-brand">MALIKHA<span>HOUSE</span></div>
+            <ul class="menu-group">
+                <li class="menu-item active"><a href="dashboard.php"><i class="fa-solid fa-chart-pie"></i> Dashboard</a></li>
+                <li class="menu-item"><a href="create.php"><i class="fa-solid fa-users"></i> Manajemen User</a></li>
+                <li class="menu-item"><a href="produk.php"><i class="fa-solid fa-box"></i> Daftar Produk</a></li>
+            </ul>
+        </div>
+        <div class="user-profile">
+            <div class="user-avatar">SM</div>
+            <div><h4 style="font-size: 0.9rem;">Siti Admin</h4><span style="font-size: 0.75rem; color: var(--text-muted);">Administrator</span></div>
+            <a href="login.php" class="logout-btn"><i class="fa-solid fa-right-from-bracket"></i></a>
+        </div>
     </div>
+
+    <div class="main-content">
+        <div class="welcome-header">
+            <h2>Selamat Datang Kembali</h2>
+            <p>Berikut adalah ringkasan performa toko hijab dan manajemen hak akses pengguna.</p>
+        </div>
 
     <div class="main-content">
         <div class="data-section">

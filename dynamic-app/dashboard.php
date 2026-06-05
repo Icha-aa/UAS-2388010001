@@ -59,7 +59,7 @@ $total_user = $pdo->query("SELECT COUNT(*) FROM users")->fetchColumn();
 <body>
     <div class="sidebar">
         <div>
-            <div class="sidebar-brand">Core<span>System</span></div>
+            <div class="sidebar-brand">MALIKHA<span>HOUSE</span></div>
             <ul class="menu-group">
                 <li class="menu-item active"><a href="dashboard.php"><i class="fa-solid fa-chart-pie"></i> Dashboard</a></li>
                 <li class="menu-item"><a href="create.php"><i class="fa-solid fa-users"></i> Manajemen User</a></li>
