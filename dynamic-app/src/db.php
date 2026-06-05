@@ -1,6 +1,6 @@
 <?php
 $host = 'db';
-$db   = 'kerudung_db';
+$db   = 'uas_db';
 $user = 'sitimalikha19';
 $pass = 'secretpass';
 
