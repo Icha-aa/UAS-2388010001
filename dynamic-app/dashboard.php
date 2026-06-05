@@ -64,7 +64,6 @@ $total_user = $pdo->query("SELECT COUNT(*) FROM users")->fetchColumn();
                 <li class="menu-item active"><a href="dashboard.php"><i class="fa-solid fa-chart-pie"></i> Dashboard</a></li>
                 <li class="menu-item"><a href="create.php"><i class="fa-solid fa-users"></i> Manajemen User</a></li>
                 <li class="menu-item"><a href="produk.php"><i class="fa-solid fa-box"></i> Daftar Produk</a></li>
-                <li class="menu-item"><a href="setting.php"><i class="fa-solid fa-gear"></i> Pengaturan</a></li>
             </ul>
         </div>
         <div class="user-profile">

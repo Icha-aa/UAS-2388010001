@@ -1,88 +1,80 @@
 <?php
 session_start();
-include 'src/db.php';
+// Pastikan path ke db.php benar
+include 'src/db.php'; 
 
-// Proses Hapus (Jika ada parameter hapus di URL)
-if (isset($_GET['hapus'])) {
-    $stmt = $pdo->prepare("DELETE FROM products WHERE id = ?");
-    $stmt->execute([$_GET['hapus']]);
-    header("Location: produk.php");
+// Mengambil data dari tabel 'products'
+// Pastikan nama tabel di database Anda benar (misal: 'products' atau 'produk')
+try {
+    $stmt = $pdo->query("SELECT * FROM products");
+    $list_produk = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    die("Error mengambil data: " . $e->getMessage());
 }
-
-// Proses Tambah Produk
-if (isset($_POST['tambah'])) {
-    $stmt = $pdo->prepare("INSERT INTO products (kode_produk, nama_produk, kategori, harga_jual, stok) VALUES (?, ?, ?, ?, ?)");
-    $stmt->execute([$_POST['kode'], $_POST['nama'], $_POST['kategori'], $_POST['harga'], $_POST['stok']]);
-    header("Location: produk.php");
-}
-
-// Ambil Data Produk
-$produk = $pdo->query("SELECT * FROM products")->fetchAll();
 ?>
 
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Daftar Produk - MALIKHA HOUSE</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Daftar Produk - Malikha House</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --bg-workspace: #f9f8f6; --bg-card: #ffffff; --accent-brown: #8e7355; --text-main: #2c2520; --text-muted: #8a8073; --border-color: #ededeb; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background-color: var(--bg-workspace); display: flex; }
+        
+        /* Sidebar Styling */
+        .sidebar { width: 260px; height: 100vh; background: #ffffff; border-right: 1px solid var(--border-color); position: fixed; padding: 30px 20px; }
+        .sidebar-brand { font-size: 1.25rem; font-weight: 700; margin-bottom: 40px; }
+        .menu-item a { display: block; padding: 12px; color: var(--text-muted); text-decoration: none; }
+        .menu-item.active a { color: var(--accent-brown); font-weight: bold; }
+
+        /* Content */
+        .main-content { margin-left: 260px; width: calc(100% - 260px); padding: 40px 50px; }
+        .data-section { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 30px; }
+        .btn-tambah { background: var(--accent-brown); color: white; padding: 10px 20px; text-decoration: none; border-radius: 6px; float: right; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th { text-align: left; padding: 15px; border-bottom: 2px solid var(--border-color); }
+        td { padding: 15px; border-bottom: 1px solid var(--border-color); }
+    </style>
 </head>
 <body>
+    <div class="sidebar">
+        <div class="sidebar-brand">Malikha<span>House</span></div>
+        <ul style="list-style: none;">
+            <li class="menu-item"><a href="dashboard.php"><i class="fa-solid fa-chart-pie"></i> Dashboard</a></li>
+            <li class="menu-item active"><a href="produk.php"><i class="fa-solid fa-box"></i> Daftar Produk</a></li>
+        </ul>
+    </div>
+
     <div class="main-content">
-        <div class="header-section">
-            <div>
-                <h2>Manajemen Produk</h2>
-                <p>Kelola stok dan harga produk hijab.</p>
-            </div>
-            <button class="btn-tambah" onclick="openModal('modalTambah')"><i class="fa-solid fa-plus"></i> Tambah Produk</button>
-        </div>
-        
-        <div class="card-table">
-            <table class="data-table">
+        <div class="data-section">
+            <a href="tambah_produk.php" class="btn-tambah">+ Tambah Produk</a>
+            <h2>Manajemen Daftar Produk</h2>
+            <table>
                 <thead>
-                    <tr><th>ID</th><th>KODE</th><th>NAMA</th><th>KATEGORI</th><th>HARGA</th><th>STOK</th><th>AKSI</th></tr>
+                    <tr><th>ID</th><th>Kode</th><th>Nama Produk</th><th>Harga</th><th>Stok</th><th>Aksi</th></tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($produk as $p): ?>
-                    <tr>
-                        <td><?= $p['id'] ?></td>
-                        <td><?= $p['kode_produk'] ?></td>
-                        <td><?= $p['nama_produk'] ?></td>
-                        <td><span class="badge-kategori"><?= $p['kategori'] ?></span></td>
-                        <td>Rp <?= number_format($p['harga_jual'], 0, ',', '.') ?></td>
-                        <td><?= $p['stok'] ?> pcs</td>
-                        <td class="action-links">
-                            <button onclick="window.location.href='edit_produk.php?id=<?= $p['id'] ?>'"><i class="fa-regular fa-pen-to-square"></i></button>
-                            <button onclick="if(confirm('Hapus produk?')) window.location.href='?hapus=<?= $p['id'] ?>'" style="color: #c94a4a;"><i class="fa-regular fa-trash-can"></i></button>
-                        </td>
-                    </tr>
-                    <?php endforeach; ?>
+                    <?php if (!empty($list_produk)): ?>
+                        <?php foreach ($list_produk as $p): ?>
+                        <tr>
+                            <td><?php echo $p['id']; ?></td>
+                            <td><?php echo $p['kode_produk']; ?></td>
+                            <td><?php echo $p['nama_produk']; ?></td>
+                            <td>Rp <?php echo number_format($p['harga_jual'], 0, ',', '.'); ?></td>
+                            <td><?php echo $p['stok']; ?></td>
+                            <td><a href="edit_produk.php?id=<?php echo $p['id']; ?>">Edit</a></td>
+                        </tr>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <tr><td colspan="6">Tidak ada produk ditemukan.</td></tr>
+                    <?php endif; ?>
                 </tbody>
             </table>
         </div>
     </div>
-
-    <div id="modalTambah" class="modal">
-        <div class="modal-content">
-            <form method="POST">
-                <div class="modal-header">Tambah Produk</div>
-                <div class="form-group"><label>Kode</label><input type="text" name="kode" class="form-control" required></div>
-                <div class="form-group"><label>Nama</label><input type="text" name="nama" class="form-control" required></div>
-                <div class="form-group"><label>Kategori</label><input type="text" name="kategori" class="form-control" required></div>
-                <div class="form-group"><label>Harga</label><input type="number" name="harga" class="form-control" required></div>
-                <div class="form-group"><label>Stok</label><input type="number" name="stok" class="form-control" required></div>
-                <div class="modal-footer">
-                    <button type="button" class="btn-close" onclick="closeModal('modalTambah')">Batal</button>
-                    <button type="submit" name="tambah" class="btn-submit">Simpan</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <script>
-        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-    </script>
 </body>
 </html>
