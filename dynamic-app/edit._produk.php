@@ -1,56 +1,69 @@
 <?php
-// 1. Inisialisasi Auth & Database PDO
+// 1. Inisialisasi Auth & Koneksi Database PDO
 require_once 'src/db.php';
 require_once 'src/auth.php';
 
 $error = '';
 $success = '';
 
-// 2. Ambil ID Produk secara aman dari parameter URL
+// 2. Validasi Parameter ID Produk yang akan diedit
 if (!isset($_GET['id']) || empty($_GET['id'])) {
     header("Location: produk.php");
     exit;
 }
+
 $id = $_GET['id'];
 
-// 3. Proses Update Data saat Form disubmit (Method POST)
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+// 3. Ambil Data Produk Berdasarkan ID dari Tabel 'products'
+try {
+    // FIX: Menggunakan nama tabel 'products' sesuai dengan database uas_db/kerudung_db kamu
+    $stmt = $pdo->prepare("SELECT * FROM products WHERE id = ?");
+    $stmt->execute([$id]);
+    $product = $stmt->fetch();
+
+    if (!$product) {
+        die("Data produk tidak ditemukan di sistem.");
+    }
+} catch (PDOException $e) {
+    die("Gagal mengambil data produk: " . $e->getMessage());
+}
+
+// 4. Proses Update Data saat Form di-submit
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $kode_produk = trim($_POST['kode_produk']);
     $nama_produk = trim($_POST['nama_produk']);
     $kategori    = $_POST['kategori'];
-    $harga_jual  = $_POST['harga_jual'];
-    $stok        = $_POST['stok'];
+    $harga_jual  = floatval($_POST['harga_jual']);
+    $stok        = intval($_POST['stok']);
 
     try {
-        // Melakukan update ke tabel 'products' sesuai struktur uas_db kamu
-        $sql_update = "UPDATE products SET kode_produk = ?, nama_produk = ?, kategori = ?, harga_jual = ?, stok = ? WHERE id = ?";
-        $stmt_update = $pdo->prepare($sql_update);
-        $stmt_update->execute([$kode_produk, $nama_produk, $kategori, $harga_jual, $stok, $id]);
+        // Validasi agar kode_produk tidak kembar dengan produk lain saat di-update
+        $stmt_cek = $pdo->prepare("SELECT COUNT(*) FROM products WHERE kode_produk = ? AND id != ?");
+        $stmt_cek->execute([$kode_produk, $id]);
+        
+        if ($stmt_cek->fetchColumn() > 0) {
+            $error = "Kode produk <strong>$kode_produk</strong> sudah digunakan oleh produk lain!";
+        } else {
+            // Update data ke tabel 'products'
+            $sql = "UPDATE products SET kode_produk = ?, nama_produk = ?, kategori = ?, harga_jual = ?, stok = ? WHERE id = ?";
+            $stmt_update = $pdo->prepare($sql);
+            $stmt_update->execute([$kode_produk, $nama_produk, $kategori, $harga_jual, $stok, $id]);
 
-        $success = "Data produk berhasil diperbarui!";
-        // Redirect otomatis kembali ke data master produk dalam 1.5 detik
-        header("Refresh: 1.5; URL=produk.php");
+            $success = "Data produk <strong>$nama_produk</strong> berhasil diperbarui!";
+            
+            // Refresh data terbaru agar langsung tampil di form input
+            $stmt->execute([$id]);
+            $product = $stmt->fetch();
+            
+            // Alihkan kembali ke halaman daftar produk setelah 1.5 detik
+            header("Refresh: 1.5; URL=produk.php");
+        }
     } catch (PDOException $e) {
-        $error = "Gagal memperbarui data: " . $e->getMessage();
+        $error = "Gagal memperbarui data produk: " . $e->getMessage();
     }
 }
 
-// 4. Ambil Data Lama Produk untuk ditampilkan di dalam Form Input
-try {
-    $stmt_fetch = $pdo->prepare("SELECT * FROM products WHERE id = ?");
-    $stmt_fetch->execute([$id]);
-    $p = $stmt_fetch->fetch();
-
-    // Jika ID produk tidak ditemukan di SQL, lempar kembali ke halaman utama produk
-    if (!$p) {
-        header("Location: produk.php");
-        exit;
-    }
-} catch (PDOException $e) {
-    die("Koneksi bermasalah: " . $e->getMessage());
-}
-
-// Ambil Informasi Akun untuk Sidebar Profile
+// Mengambil data login aktif untuk keperluan Profile Sidebar
 $nama_user = $_SESSION['nama_petugas'] ?? $_SESSION['nama'] ?? 'Siti Admin';
 $role_user = $_SESSION['role'] ?? 'Administrator';
 $inisial = strtoupper(substr($nama_user, 0, 2));
@@ -61,7 +74,7 @@ $inisial = strtoupper(substr($nama_user, 0, 2));
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Produk - CoreSystem Hijab</title>
+    <title>Ubah Produk - CoreSystem Hijab</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -77,7 +90,7 @@ $inisial = strtoupper(substr($nama_user, 0, 2));
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
         body { background-color: var(--bg-workspace); color: var(--text-main); display: flex; }
         
-        /* Sidebar Menu Layout */
+        /* Sidebar Menu Navigation Layout */
         .sidebar { width: 260px; height: 100vh; background: #ffffff; border-right: 1px solid var(--border-color); position: fixed; padding: 30px 20px; display: flex; flex-direction: column; justify-content: space-between; }
         .sidebar-brand { font-size: 1.25rem; font-weight: 700; margin-bottom: 40px; padding-left: 10px; }
         .sidebar-brand span { color: var(--accent-brown); }
@@ -89,28 +102,29 @@ $inisial = strtoupper(substr($nama_user, 0, 2));
         .user-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--accent-brown-light); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; }
         .logout-btn { color: var(--text-muted); text-decoration: none; font-size: 1.1rem; margin-left: auto; }
 
-        /* Main Workspace Content */
+        /* Main View Workspace Layout */
         .main-content { margin-left: 260px; width: calc(100% - 260px); padding: 40px 50px; }
         .header-title h2 { font-size: 1.8rem; font-weight: 700; }
         .header-title p { color: var(--text-muted); font-size: 0.95rem; margin-top: 4px; }
-        
-        /* Card Panel Form */
+
+        /* Card Form Box Element */
         .form-section { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 35px; max-width: 750px; margin-top: 30px; }
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px; }
         .full-width { grid-column: span 2; }
         .form-group { display: flex; flex-direction: column; gap: 8px; }
-        .form-group label { font-size: 0.85rem; font-weight: 600; }
-        .form-control { width: 100%; padding: 12px 15px; border: 1px solid var(--border-color); background-color: #fdfdfd; border-radius: 8px; font-size: 0.95rem; outline: none; }
+        .form-group label { font-size: 0.85rem; font-weight: 600; color: var(--text-main); }
+        .form-control { width: 100%; padding: 12px 15px; border: 1px solid var(--border-color); background-color: #fdfdfd; border-radius: 8px; font-size: 0.95rem; outline: none; transition: all 0.2s; }
         .form-control:focus { border-color: var(--accent-brown); background-color: #fff; box-shadow: 0 0 0 4px rgba(142, 115, 85, 0.08); }
         
-        /* Action Buttons Group */
-        .btn-group-form { display: flex; gap: 12px; justify-content: flex-end; }
-        .btn-submit { background: var(--accent-brown); color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 600; cursor: pointer; }
+        /* Interactive Control Actions */
+        .btn-group-form { display: flex; gap: 12px; justify-content: flex-end; align-items: center; }
+        .btn-submit { background: var(--accent-brown); color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: background 0.2s; }
         .btn-submit:hover { background: var(--accent-brown-light); }
-        .btn-cancel { background: transparent; color: var(--text-muted); border: 1px solid var(--border-color); padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 500; text-align: center; }
+        .btn-cancel { background: transparent; color: var(--text-muted); border: 1px solid var(--border-color); padding: 11px 24px; border-radius: 8px; text-decoration: none; font-weight: 500; font-size: 0.95rem; text-align: center; transition: all 0.2s; }
+        .btn-cancel:hover { background: #f5f4f2; color: var(--text-main); }
 
-        /* System Alert Boxes */
-        .alert { padding: 12px 15px; border-radius: 6px; font-size: 0.9rem; font-weight: 500; margin-bottom: 20px; }
+        /* System Action Toast Messaging */
+        .alert { padding: 12px 15px; border-radius: 8px; font-size: 0.9rem; font-weight: 500; margin-bottom: 25px; display: flex; align-items: center; gap: 10px; }
         .alert-danger { background-color: #fde8e8; color: #e02424; border: 1px solid #fbd5d5; }
         .alert-success { background-color: #def7ec; color: #03543f; border: 1px solid #bcf0da; }
     </style>
@@ -138,8 +152,8 @@ $inisial = strtoupper(substr($nama_user, 0, 2));
 
     <div class="main-content">
         <div class="header-title">
-            <h2>Ubah Data Produk Hijab</h2>
-            <p>Modifikasi rincian data stok dan harga jual varian kerudung etalase.</p>
+            <h2>Ubah Detail Produk Hijab</h2>
+            <p>Perbarui informasi komoditas stok varian hijab milik toko Malikha House.</p>
         </div>
 
         <div class="form-section">
@@ -153,37 +167,37 @@ $inisial = strtoupper(substr($nama_user, 0, 2));
             <form action="" method="POST">
                 <div class="form-grid">
                     <div class="form-group">
-                        <label>Kode Varian (kode_produk)</label>
-                        <input type="text" name="kode_produk" class="form-control" value="<?= htmlspecialchars($p['kode_produk'] ?? '') ?>" placeholder="Contoh: KRD-001" required>
+                        <label>Kode SKU Produk (kode_produk)</label>
+                        <input type="text" name="kode_produk" class="form-control" value="<?= htmlspecialchars($product['kode_produk']) ?>" required>
                     </div>
 
                     <div class="form-group">
-                        <label>Kategori Produk (kategori)</label>
+                        <label>Kategori Produk</label>
                         <select name="kategori" class="form-control" required>
-                            <option value="Pashmina" <?= ($p['kategori'] ?? '') == 'Pashmina' ? 'selected' : '' ?>>Pashmina</option>
-                            <option value="Segi Empat" <?= ($p['kategori'] ?? '') == 'Segi Empat' ? 'selected' : '' ?>>Segi Empat</option>
-                            <option value="Bergo" <?= ($p['kategori'] ?? '') == 'Bergo' ? 'selected' : '' ?>>Bergo</option>
+                            <option value="Pashmina" <?= $product['kategori'] === 'Pashmina' ? 'selected' : '' ?>>Pashmina</option>
+                            <option value="Segi Empat" <?= $product['kategori'] === 'Segi Empat' ? 'selected' : '' ?>>Segi Empat</option>
+                            <option value="Bergo" <?= $product['kategori'] === 'Bergo' ? 'selected' : '' ?>>Bergo</option>
                         </select>
                     </div>
 
                     <div class="form-group full-width">
-                        <label>Nama Model Hijab (nama_produk)</label>
-                        <input type="text" name="nama_produk" class="form-control" value="<?= htmlspecialchars($p['nama_produk'] ?? '') ?>" placeholder="Contoh: Pashmina Silk Premium" required>
+                        <label>Nama Varian Hijab (nama_produk)</label>
+                        <input type="text" name="nama_produk" class="form-control" value="<?= htmlspecialchars($product['nama_produk']) ?>" required>
                     </div>
 
                     <div class="form-group">
-                        <label>Harga Jual Satuan Rp (harga_jual)</label>
-                        <input type="number" name="harga_jual" class="form-control" value="<?= htmlspecialchars($p['harga_jual'] ?? 0) ?>" min="0" required>
+                        <label>Harga Jual Satuan (Rp)</label>
+                        <input type="number" name="harga_jual" class="form-control" value="<?= htmlspecialchars($product['harga_jual']) ?>" min="0" required>
                     </div>
 
                     <div class="form-group">
-                        <label>Ketersediaan Stok Pcs (stok)</label>
-                        <input type="number" name="stok" class="form-control" value="<?= htmlspecialchars($p['stok'] ?? 0) ?>" min="0" required>
+                        <label>Jumlah Stok di Gudang (Pcs)</label>
+                        <input type="number" name="stok" class="form-control" value="<?= htmlspecialchars($product['stok']) ?>" min="0" required>
                     </div>
                 </div>
 
                 <div class="btn-group-form">
-                    <a href="produk.php" class="btn-cancel">Batal</a>
+                    <a href="produk.php" class="btn-cancel">Batal Kembali</a>
                     <button type="submit" class="btn-submit">Simpan Perubahan</button>
                 </div>
             </form>
