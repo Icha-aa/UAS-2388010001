@@ -73,7 +73,7 @@ $produk_terlaris = [
             <div class="sidebar-brand">MALIKHA<span>HOUSE</span></div>
             <ul class="menu-group">
                 <li class="menu-item active"><a href="dashboard.php"><i class="fa-solid fa-chart-pie"></i> Dashboard</a></li>
-                <li class="menu-item"><a href="create.php"><i class="fa-solid fa-users"></i> Manajemen User</a></li>
+                <li class="menu-item"><a href="manajemen_user.php"><i class="fa-solid fa-users"></i> Manajemen User</a></li>
                 <li class="menu-item"><a href="produk.php"><i class="fa-solid fa-box"></i> Daftar Produk</a></li>
             </ul>
         </div>
