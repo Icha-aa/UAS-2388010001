@@ -76,12 +76,6 @@ $total_user = $pdo->query("SELECT COUNT(*) FROM users")->fetchColumn();
     <div class="main-content">
         <div class="welcome-header">
             <h2>Selamat Datang Kembali</h2>
-            <p>Berikut adalah ringkasan performa toko hijab dan manajemen hak akses pengguna.</p>
-        </div>
-        
-    <div class="main-content">
-        <div class="welcome-header">
-            <h2>Selamat Datang Kembali</h2>
             <p>Berikut adalah ringkasan performa toko hijab.</p>
         </div>
 

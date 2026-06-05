@@ -1,10 +1,7 @@
 <?php
 session_start();
-// Pastikan path ke db.php benar
 include 'src/db.php'; 
 
-// Mengambil data dari tabel 'products'
-// Pastikan nama tabel di database Anda benar (misal: 'products' atau 'produk')
 try {
     $stmt = $pdo->query("SELECT * FROM products");
     $list_produk = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -25,13 +22,11 @@ try {
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
         body { background-color: var(--bg-workspace); display: flex; }
         
-        /* Sidebar Styling */
         .sidebar { width: 260px; height: 100vh; background: #ffffff; border-right: 1px solid var(--border-color); position: fixed; padding: 30px 20px; }
         .sidebar-brand { font-size: 1.25rem; font-weight: 700; margin-bottom: 40px; }
         .menu-item a { display: block; padding: 12px; color: var(--text-muted); text-decoration: none; }
         .menu-item.active a { color: var(--accent-brown); font-weight: bold; }
 
-        /* Content */
         .main-content { margin-left: 260px; width: calc(100% - 260px); padding: 40px 50px; }
         .data-section { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 30px; }
         .btn-tambah { background: var(--accent-brown); color: white; padding: 10px 20px; text-decoration: none; border-radius: 6px; float: right; }
@@ -42,26 +37,13 @@ try {
 </head>
 <body>
     <div class="sidebar">
-        <div>
-            <div class="sidebar-brand">MALIKHA<span>HOUSE</span></div>
-            <ul class="menu-group">
-                <li class="menu-item active"><a href="dashboard.php"><i class="fa-solid fa-chart-pie"></i> Dashboard</a></li>
-                <li class="menu-item"><a href="create.php"><i class="fa-solid fa-users"></i> Manajemen User</a></li>
-                <li class="menu-item"><a href="produk.php"><i class="fa-solid fa-box"></i> Daftar Produk</a></li>
-            </ul>
-        </div>
-        <div class="user-profile">
-            <div class="user-avatar">SM</div>
-            <div><h4 style="font-size: 0.9rem;">Siti Admin</h4><span style="font-size: 0.75rem; color: var(--text-muted);">Administrator</span></div>
-            <a href="login.php" class="logout-btn"><i class="fa-solid fa-right-from-bracket"></i></a>
-        </div>
+        <div class="sidebar-brand">MALIKHA<span>HOUSE</span></div>
+        <ul style="list-style: none;">
+            <li class="menu-item"><a href="dashboard.php"><i class="fa-solid fa-chart-pie"></i> Dashboard</a></li>
+            <li class="menu-item"><a href="create.php"><i class="fa-solid fa-users"></i> Manajemen User</a></li>
+            <li class="menu-item active"><a href="produk.php"><i class="fa-solid fa-box"></i> Daftar Produk</a></li>
+        </ul>
     </div>
-
-    <div class="main-content">
-        <div class="welcome-header">
-            <h2>Selamat Datang Kembali</h2>
-            <p>Berikut adalah ringkasan performa toko hijab dan manajemen hak akses pengguna.</p>
-        </div>
 
     <div class="main-content">
         <div class="data-section">
@@ -72,20 +54,20 @@ try {
                     <tr><th>ID</th><th>Kode</th><th>Nama Produk</th><th>Harga</th><th>Stok</th><th>Aksi</th></tr>
                 </thead>
                 <tbody>
-                    <?php if (!empty($list_produk)): ?>
-                        <?php foreach ($list_produk as $p): ?>
-                        <tr>
-                            <td><?php echo $p['id']; ?></td>
-                            <td><?php echo $p['kode_produk']; ?></td>
-                            <td><?php echo $p['nama_produk']; ?></td>
-                            <td>Rp <?php echo number_format($p['harga_jual'], 0, ',', '.'); ?></td>
-                            <td><?php echo $p['stok']; ?></td>
-                            <td><a href="edit_produk.php?id=<?php echo $p['id']; ?>">Edit</a></td>
-                        </tr>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <tr><td colspan="6">Tidak ada produk ditemukan.</td></tr>
-                    <?php endif; ?>
+                    <?php foreach ($list_produk as $p): ?>
+                    <tr>
+                        <td><?php echo $p['id']; ?></td>
+                        <td><?php echo $p['kode_produk']; ?></td>
+                        <td><?php echo $p['nama_produk']; ?></td>
+                        <td>Rp <?php echo number_format($p['harga_jual'], 0, ',', '.'); ?></td>
+                        <td><?php echo $p['stok']; ?></td>
+                        <td>
+                            <a href="edit_produk.php?id=<?php echo $p['id']; ?>" style="color: var(--accent-brown);">
+                                <i class="fa-solid fa-pen-to-square"></i> Edit
+                            </a>
+                        </td>
+                    </tr>
+                    <?php endforeach; ?>
                 </tbody>
             </table>
         </div>
