@@ -3,25 +3,40 @@
 require_once 'src/db.php';
 require_once 'src/auth.php';
 
-// 2. Ambil data ringkasan untuk Widget & Tabel dari database uas_db
-try {
-    // Memperbaiki query dari 'produk' menjadi 'products' agar tidak error base table not found
-    $stmt = $pdo->query("SELECT * FROM products ORDER BY id ASC");
-    $list_produk = $stmt->fetchAll();
+$error = '';
+$success = '';
 
-    // Menghitung total varian produk hijab
-    $total_varian = count($list_produk);
+// 2. Proses Simpan Data jika Form disubmit
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $kode     = trim($_POST['kode_produk']);
+    $nama     = trim($_POST['nama_produk']);
+    $kategori = $_POST['kategori'];
+    $harga    = $_POST['harga_jual'];
+    $stok     = $_POST['stok'];
 
-    // Menghitung akumulasi total seluruh stok barang di gudang
-    $total_stok = 0;
-    foreach ($list_produk as $p) {
-        $total_stok += ($p['stok'] ?? 0);
+    try {
+        // Cek apakah kode produk sudah pernah dipakai sebelumnya
+        $stmt_cek = $pdo->prepare("SELECT COUNT(*) FROM products WHERE kode_produk = ?");
+        $stmt_cek->execute([$kode]);
+        
+        if ($stmt_cek->fetchColumn() > 0) {
+            $error = "Kode produk <strong>$kode</strong> sudah terdaftar! Gunakan kode varian lain.";
+        } else {
+            // Melakukan insert data ke tabel 'products' sesuai skema database
+            $sql = "INSERT INTO products (kode_produk, nama_produk, kategori, harga_jual, stok) VALUES (?, ?, ?, ?, ?)";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([$kode, $nama, $kategori, $harga, $stok]);
+
+            $success = "Produk baru berhasil ditambahkan ke etalase!";
+            // Redirect otomatis kembali ke data master produk dalam 1.5 detik
+            header("Refresh: 1.5; URL=produk.php");
+        }
+    } catch (PDOException $e) {
+        $error = "Gagal menyimpan ke database: " . $e->getMessage();
     }
-} catch (PDOException $e) {
-    die("Gagal memuat sistem dashboard: " . $e->getMessage());
 }
 
-// 3. Mengambil informasi akun login aktif untuk Profile Sidebar
+// 3. Ambil Informasi Akun Login untuk Profile Sidebar
 $nama_user = $_SESSION['nama_petugas'] ?? $_SESSION['nama'] ?? 'Siti Admin';
 $role_user = $_SESSION['role'] ?? 'Administrator';
 $inisial = strtoupper(substr($nama_user, 0, 2));
@@ -32,7 +47,7 @@ $inisial = strtoupper(substr($nama_user, 0, 2));
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Utama - CoreSystem Hijab</title>
+    <title>Tambah Produk - CoreSystem Hijab</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -48,7 +63,7 @@ $inisial = strtoupper(substr($nama_user, 0, 2));
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
         body { background-color: var(--bg-workspace); color: var(--text-main); display: flex; }
         
-        /* Sidebar Menu Navigation */
+        /* Sidebar Layout Component */
         .sidebar { width: 260px; height: 100vh; background: #ffffff; border-right: 1px solid var(--border-color); position: fixed; padding: 30px 20px; display: flex; flex-direction: column; justify-content: space-between; }
         .sidebar-brand { font-size: 1.25rem; font-weight: 700; margin-bottom: 40px; padding-left: 10px; }
         .sidebar-brand span { color: var(--accent-brown); }
@@ -60,30 +75,31 @@ $inisial = strtoupper(substr($nama_user, 0, 2));
         .user-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--accent-brown-light); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; }
         .logout-btn { color: var(--text-muted); text-decoration: none; font-size: 1.1rem; margin-left: auto; }
 
-        /* Main Workspace Layout */
+        /* Main Workspace Container */
         .main-content { margin-left: 260px; width: calc(100% - 260px); padding: 40px 50px; }
         .header-title h2 { font-size: 1.8rem; font-weight: 700; }
         .header-title p { color: var(--text-muted); font-size: 0.95rem; margin-top: 4px; }
         
-        /* Dashboard Info Cards / Widgets */
-        .widget-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin: 30px 0; }
-        .widget-card { background: var(--bg-card); border: 1px solid var(--border-color); padding: 25px; border-radius: 12px; display: flex; align-items: center; justify-content: space-between; }
-        .widget-info h5 { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
-        .widget-info h3 { font-size: 1.8rem; font-weight: 700; margin-top: 5px; }
-        .widget-icon { width: 48px; height: 48px; background: #faf8f5; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--accent-brown); font-size: 1.3rem; }
+        /* Clean Form Card Design */
+        .form-section { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 35px; max-width: 750px; margin-top: 30px; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px; }
+        .full-width { grid-column: span 2; }
+        .form-group { display: flex; flex-direction: column; gap: 8px; }
+        .form-group label { font-size: 0.85rem; font-weight: 600; color: var(--text-main); }
+        .form-control { width: 100%; padding: 12px 15px; border: 1px solid var(--border-color); background-color: #fdfdfd; border-radius: 8px; font-size: 0.95rem; outline: none; transition: all 0.2s; }
+        .form-control:focus { border-color: var(--accent-brown); background-color: #fff; box-shadow: 0 0 0 4px rgba(142, 115, 85, 0.08); }
+        
+        /* Form Operational Actions */
+        .btn-group-form { display: flex; gap: 12px; justify-content: flex-end; align-items: center; }
+        .btn-submit { background: var(--accent-brown); color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: background 0.2s; }
+        .btn-submit:hover { background: var(--accent-brown-light); }
+        .btn-cancel { background: transparent; color: var(--text-muted); border: 1px solid var(--border-color); padding: 11px 24px; border-radius: 8px; text-decoration: none; font-weight: 500; font-size: 0.95rem; text-align: center; transition: all 0.2s; }
+        .btn-cancel:hover { background: #f5f4f2; color: var(--text-main); }
 
-        /* Table Container Sheet */
-        .data-section { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 35px; }
-        .section-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
-        
-        /* Table Design */
-        table { width: 100%; border-collapse: collapse; text-align: left; }
-        th { font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; padding-bottom: 15px; border-bottom: 1px solid var(--border-color); }
-        td { padding: 18px 0; border-bottom: 1px solid var(--border-color); font-size: 0.95rem; }
-        
-        .badge-kategori { background: #f3f4f6; color: #4b5563; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 500; }
-        .actions-cell a { color: var(--text-muted); text-decoration: none; font-size: 1rem; }
-        .actions-cell a:hover { color: var(--accent-brown); }
+        /* Floating Alert Box System */
+        .alert { padding: 12px 15px; border-radius: 8px; font-size: 0.9rem; font-weight: 500; margin-bottom: 25px; display: flex; align-items: center; gap: 10px; }
+        .alert-danger { background-color: #fde8e8; color: #e02424; border: 1px solid #fbd5d5; }
+        .alert-success { background-color: #def7ec; color: #03543f; border: 1px solid #bcf0da; }
     </style>
 </head>
 <body>
@@ -91,9 +107,9 @@ $inisial = strtoupper(substr($nama_user, 0, 2));
         <div>
             <div class="sidebar-brand">Core<span>System</span></div>
             <ul class="menu-group">
-                <li class="menu-item active"><a href="dashboard.php"><i class="fa-solid fa-chart-pie"></i> Dashboard</a></li>
+                <li class="menu-item"><a href="dashboard.php"><i class="fa-solid fa-chart-pie"></i> Dashboard</a></li>
                 <li class="menu-item"><a href="tambah_user.php"><i class="fa-solid fa-users"></i> Manajemen User</a></li>
-                <li class="menu-item"><a href="produk.php"><i class="fa-solid fa-box"></i> Daftar Produk</a></li>
+                <li class="menu-item active"><a href="produk.php"><i class="fa-solid fa-box"></i> Daftar Produk</a></li>
                 <li class="menu-item"><a href="settin.php"><i class="fa-solid fa-gear"></i> Pengaturan</a></li>
             </ul>
         </div>
@@ -109,77 +125,56 @@ $inisial = strtoupper(substr($nama_user, 0, 2));
 
     <div class="main-content">
         <div class="header-title">
-            <h2>Selamat Datang Kembali</h2>
-            <p>Berikut adalah ringkasan performa toko hijab dan manajemen hak akses pengguna.</p>
+            <h2>Tambah Produk Baru</h2>
+            <p>Masukkan varian model jilbab baru ke dalam database inventaris toko.</p>
         </div>
 
-        <div class="widget-grid">
-            <div class="widget-card">
-                <div class="widget-info">
-                    <h5>Total Produk Hijab</h5>
-                    <h3><?= var_format = $total_varian ?> Varian</h3>
-                </div>
-                <div class="widget-icon"><i class="fa-solid fa-shirt"></i></div>
-            </div>
+        <div class="form-section">
+            <?php if (!empty($error)): ?>
+                <div class="alert alert-danger"><i class="fa-solid fa-circle-exclamation"></i> <?= $error ?></div>
+            <?php endif; ?>
+            <?php if (!empty($success)): ?>
+                <div class="alert alert-success"><i class="fa-solid fa-circle-check"></i> <?= $success ?></div>
+            <?php endif; ?>
 
-            <div class="widget-card">
-                <div class="widget-info">
-                    <h5>Total Stok Gudang</h5>
-                    <h3><?= number_format($total_stok, 0, ',', '.') ?> Pcs</h3>
-                </div>
-                <div class="widget-icon"><i class="fa-solid fa-boxes-stacked"></i></div>
-            </div>
+            <form action="" method="POST">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Kode Varian (kode_produk)</label>
+                        <input type="text" name="kode_produk" class="form-control" placeholder="Contoh: KRD-005" required>
+                    </div>
 
-            <div class="widget-card">
-                <div class="widget-info">
-                    <h5>Petugas Terdaftar</h5>
-                    <h3>2 Akun</h3>
-                </div>
-                <div class="widget-icon"><i class="fa-solid fa-user-gear"></i></div>
-            </div>
-        </div>
+                    <div class="form-group">
+                        <label>Kategori (kategori)</label>
+                        <select name="kategori" class="form-control" required>
+                            <option value="">-- Pilih Jenis --</option>
+                            <option value="Pashmina">Pashmina</option>
+                            <option value="Segi Empat">Segi Empat</option>
+                            <option value="Bergo">Bergo</option>
+                        </select>
+                    </div>
 
-        <div class="data-section">
-            <div class="section-title">
-                <i class="fa-solid fa-list" style="color: var(--accent-brown);"></i>
-                <span>Ringkasan Cepat Etalase Produk</span>
-            </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Kode</th>
-                        <th>Nama Model Hijab</th>
-                        <th>Kategori</th>
-                        <th>Harga Jual</th>
-                        <th>Stok</th>
-                        <th style="text-align: right; padding-right: 15px;">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if (count($list_produk) > 0): ?>
-                        <?php foreach ($list_produk as $p): ?>
-                        <tr>
-                            <td><?= $p['id'] ?></td>
-                            <td><code><?= htmlspecialchars($p['kode_produk'] ?? '') ?></code></td>
-                            <td><strong><?= htmlspecialchars($p['nama_produk'] ?? '') ?></strong></td>
-                            <td><span class="badge-kategori"><?= htmlspecialchars($p['kategori'] ?? 'Hijab') ?></span></td>
-                            <td>Rp <?= number_format($p['harga_jual'] ?? 0, 0, ',', '.') ?></td>
-                            <td><strong><?= number_format($p['stok'] ?? 0, 0, ',', '.') ?></strong> Pcs</td>
-                            <td class="actions-cell" style="text-align: right; padding-right: 15px;">
-                                <a href="edit_produk.php?id=<?= $p['id'] ?>" title="Lihat/Ubah Detail">
-                                    <i class="fa-regular fa-pen-to-square"></i> Detail
-                                </a>
-                            </td>
-                        </tr>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <tr>
-                            <td colspan="7" style="text-align: center; color: var(--text-muted); padding: 20px 0;">Belum ada data barang di database.</td>
-                        </tr>
-                    <?php endif; ?>
-                </tbody>
-            </table>
+                    <div class="form-group full-width">
+                        <label>Nama Model Hijab (nama_produk)</label>
+                        <input type="text" name="nama_produk" class="form-control" placeholder="Contoh: Pashmina Inner Ceruty" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Harga Jual Satuan Rp (harga_jual)</label>
+                        <input type="number" name="harga_jual" class="form-control" placeholder="Masukkan harga nominal" min="0" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Ketersediaan Stok Pcs (stok)</label>
+                        <input type="number" name="stok" class="form-control" placeholder="Jumlah kuantitas barang" min="0" required>
+                    </div>
+                </div>
+
+                <div class="btn-group-form">
+                    <a href="produk.php" class="btn-cancel">Batal</a>
+                    <button type="submit" class="btn-submit">Simpan Produk</button>
+                </div>
+            </form>
         </div>
     </div>
 </body>

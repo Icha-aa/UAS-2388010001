@@ -34,7 +34,7 @@ if ($user && password_verify($password, $user['password'])) {
 <body style="justify-content: center; align-items: center; height: 100vh; display: flex;">
 
     <div class="login-card" style="background: white; padding: 40px; border-radius: 16px; border: 1px solid #ededeb; width: 100%; max-width: 400px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-        <h2 style="margin-bottom: 25px; color: #8e7355; text-align: center;">Login MALIKHA HOUSE</h2>
+        <h2 style="margin-bottom: 25px; color: #8e7355; text-align: center;">MALIKHA HOUSE</h2>
         
         <?php if(isset($error)) echo "<p style='color: #c94a4a; font-size: 0.85rem; margin-bottom: 15px; text-align: center;'>$error</p>"; ?>
         
