@@ -8,15 +8,18 @@ include 'src/db.php';
 $total_produk = $pdo->query("SELECT COUNT(*) FROM products")->fetchColumn();
 $total_stok = $pdo->query("SELECT SUM(stok) FROM products")->fetchColumn();
 $total_user = $pdo->query("SELECT COUNT(*) FROM users")->fetchColumn();
-// Mengambil 5 produk terlaris berdasarkan total jumlah terjual
-$produk_terlaris = $pdo->query("
-    SELECT nama_produk, SUM(jumlah) as total_terjual 
-    FROM detail_penjualan 
-    GROUP BY nama_produk 
-    ORDER BY total_terjual DESC 
-    LIMIT 5
-")->fetchAll(PDO::FETCH_ASSOC);
 ?>
+<?php
+// Data dummy untuk produk terlaris
+$produk_terlaris = [
+    ['nama_produk' => 'Hijab Pashmina Silk', 'total_terjual' => 45],
+    ['nama_produk' => 'Hijab Bergo Maryam', 'total_terjual' => 38],
+    ['nama_produk' => 'Hijab Segiempat Laser Cut', 'total_terjual' => 32],
+    ['nama_produk' => 'Hijab Instan Jersey', 'total_terjual' => 25],
+    ['nama_produk' => 'Ciput Rajut Premium', 'total_terjual' => 19],
+];
+?>
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -102,20 +105,27 @@ $produk_terlaris = $pdo->query("
             </div>
         </div>
     </div>
-    <div class="data-section" style="margin-top: 30px;">
-    <h3>Produk Terlaris</h3>
-    <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+
+    <div class="data-section" style="margin-top: 30px; background: #ffffff; padding: 30px; border-radius: 12px; border: 1px solid var(--border-color);">
+    <h3 style="margin-bottom: 20px;">Produk Terlaris Bulan Ini</h3>
+    <table style="width: 100%; border-collapse: collapse;">
         <thead>
-            <tr style="text-align: left; color: var(--text-muted);">
-                <th style="padding: 10px;">Nama Produk</th>
-                <th style="padding: 10px;">Terjual</th>
+            <tr style="text-align: left; color: var(--text-muted); font-size: 0.85rem;">
+                <th style="padding: 12px 0; border-bottom: 1px solid var(--border-color);">Nama Produk</th>
+                <th style="padding: 12px 0; border-bottom: 1px solid var(--border-color);">Jumlah Terjual</th>
             </tr>
         </thead>
         <tbody>
             <?php foreach ($produk_terlaris as $item): ?>
             <tr>
-                <td style="padding: 10px; border-bottom: 1px solid #eee;"><?php echo $item['nama_produk']; ?></td>
-                <td style="padding: 10px; border-bottom: 1px solid #eee; font-weight: 600;"><?php echo $item['total_terjual']; ?> Pcs</td>
+                <td style="padding: 15px 0; border-bottom: 1px solid var(--border-color); font-weight: 500;">
+                    <?php echo $item['nama_produk']; ?>
+                </td>
+                <td style="padding: 15px 0; border-bottom: 1px solid var(--border-color);">
+                    <span style="background: #f0ede9; color: var(--accent-brown); padding: 4px 10px; border-radius: 6px; font-weight: 600;">
+                        <?php echo $item['total_terjual']; ?> Pcs
+                    </span>
+                </td>
             </tr>
             <?php endforeach; ?>
         </tbody>
