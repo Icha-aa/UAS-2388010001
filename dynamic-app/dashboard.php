@@ -8,6 +8,14 @@ include 'src/db.php';
 $total_produk = $pdo->query("SELECT COUNT(*) FROM products")->fetchColumn();
 $total_stok = $pdo->query("SELECT SUM(stok) FROM products")->fetchColumn();
 $total_user = $pdo->query("SELECT COUNT(*) FROM users")->fetchColumn();
+// Mengambil 5 produk terlaris berdasarkan total jumlah terjual
+$produk_terlaris = $pdo->query("
+    SELECT nama_produk, SUM(jumlah) as total_terjual 
+    FROM detail_penjualan 
+    GROUP BY nama_produk 
+    ORDER BY total_terjual DESC 
+    LIMIT 5
+")->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -94,5 +102,24 @@ $total_user = $pdo->query("SELECT COUNT(*) FROM users")->fetchColumn();
             </div>
         </div>
     </div>
+    <div class="data-section" style="margin-top: 30px;">
+    <h3>Produk Terlaris</h3>
+    <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+        <thead>
+            <tr style="text-align: left; color: var(--text-muted);">
+                <th style="padding: 10px;">Nama Produk</th>
+                <th style="padding: 10px;">Terjual</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($produk_terlaris as $item): ?>
+            <tr>
+                <td style="padding: 10px; border-bottom: 1px solid #eee;"><?php echo $item['nama_produk']; ?></td>
+                <td style="padding: 10px; border-bottom: 1px solid #eee; font-weight: 600;"><?php echo $item['total_terjual']; ?> Pcs</td>
+            </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
 </body>
 </html>
