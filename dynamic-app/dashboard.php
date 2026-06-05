@@ -7,13 +7,13 @@ require_once 'src/auth.php';
 // checkLogin(); // Aktifkan jika fungsi ini ada di auth.php
 
 try {
-    // 1. Ambil Data Summary menggunakan PDO
+    // 1. Ambil Data Summary dari Database (Sudah disesuaikan ke tabel 'products')
     // Total Produk
-    $stmt_produk = $pdo->query("SELECT COUNT(*) as total FROM produk");
+    $stmt_produk = $pdo->query("SELECT COUNT(*) as total FROM products");
     $total_produk = $stmt_produk->fetch()['total'] ?? 0;
 
     // Total Stok Gudang
-    $stmt_stok = $pdo->query("SELECT SUM(stok) as total FROM produk");
+    $stmt_stok = $pdo->query("SELECT SUM(stok) as total FROM products");
     $total_stok = $stmt_stok->fetch()['total'] ?? 0;
 
     // Total Petugas Terdaftar
@@ -102,7 +102,7 @@ $inisial = strtoupper(substr($nama_user, 0, 2));
             <div class="sidebar-brand">Core<span>System</span></div>
             <ul class="menu-group">
                 <li class="menu-item active"><a href="dashboard.php"><i class="fa-solid fa-chart-pie"></i> Dashboard</a></li>
-                <li class="menu-item"><a href="tambah_user.php"><i class="fa-solid fa-users"></i> Manajemen User</a></li>
+                <li class="menu-item"><a href="create.php"><i class="fa-solid fa-users"></i> Manajemen User</a></li>
                 <li class="menu-item"><a href="produk.php"><i class="fa-solid fa-box"></i> Daftar Produk</a></li>
                 <li class="menu-item"><a href="settin.php"><i class="fa-solid fa-gear"></i> Pengaturan</a></li>
             </ul>
@@ -141,7 +141,7 @@ $inisial = strtoupper(substr($nama_user, 0, 2));
         <div class="data-section">
             <div class="section-header">
                 <h3>Daftar Pengguna Sistem</h3>
-                <a href="tambah_user.php" class="btn-tambah"><i class="fa-solid fa-plus"></i> Tambah User</a>
+                <a href="create.php" class="btn-tambah"><i class="fa-solid fa-plus"></i> Tambah User</a>
             </div>
             <table>
                 <thead>
@@ -161,12 +161,12 @@ $inisial = strtoupper(substr($nama_user, 0, 2));
                             <td><strong><?= htmlspecialchars($row['nama_petugas'] ?? $row['nama'] ?? '') ?></strong></td>
                             <td><?= htmlspecialchars($row['username']) ?></td>
                             <td>
-                                <span class="badge <?= ($row['role'] ?? '') == 'admin' ? 'badge-admin' : 'badge-kasir' ?>">
+                                <span class="badge <?= (strtolower($row['role'] ?? '')) == 'admin' ? 'badge-admin' : 'badge-kasir' ?>">
                                     <?= htmlspecialchars($row['role'] ?? 'kasir') ?>
                                 </span>
                             </td>
                             <td class="actions-cell">
-                                <a href="edit_user.php?id=<?= $row['id'] ?>"><i class="fa-regular fa-pen-to-square"></i></a>
+                                <a href="edit._produk.php?id=<?= $row['id'] ?>"><i class="fa-regular fa-pen-to-square"></i></a>
                                 <a href="hapus_user.php?id=<?= $row['id'] ?>" onclick="return confirm('Hapus user ini?')">
                                     <i class="fa-regular fa-trash-can"></i>
                                 </a>
