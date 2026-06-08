@@ -216,7 +216,7 @@ $inisial = strtoupper(substr($nama_user, 0, 2));
 
                 <div class="btn-group-form">
                     <a href="dashboard.php" class="btn-cancel">Batal</a>
-                    <button type="submit" class="btn-submit">Simpan Pengguna</button>
+                    <button type="submit" class="btn-submit">SAVE USER</button>
                 </div>
             </form>
         </div>
