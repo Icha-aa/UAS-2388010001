@@ -88,7 +88,7 @@ $produk_terlaris = [
 
     <div class="main-content">
         <div class="welcome-header">
-            <h2>Selamat Datang Kembali</h2>
+            <h2>Siti Malikha</h2>
             <p>Berikut adalah ringkasan performa toko hijab.</p>
         </div>
 
