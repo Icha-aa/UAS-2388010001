@@ -2,26 +2,64 @@ name: Deploy Dynamic App
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
+    paths:
+      - "dynamic-app/**"
+      - "docker-compose.yml"
+      - ".github/workflows/deploy-dynamic.yml"
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
-    env:
-      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-
     steps:
-      - name: Checkout Source Code
-        uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v2
+      - name: Login ke Docker Hub
+        uses: docker/login-action@v3
         with:
-          username: ${{ env.DOCKERHUB_USERNAME }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and Push Dynamic Image
-        run: |
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/kerudung-dynamic:latest -f Dockerfile .
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/kerudung-dynamic:latest
+      - name: Build & Push image dinamis
+        uses: docker/build-push-action@v5
+        with:
+          context: ./dynamic-app
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/kerudung-dinamis:latest
+
+      - name: Bersihkan folder & container lama di EC2
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            docker rm -f kerudung_dinamis kerudung_nginx kerudung_db kerudung_app 2>/dev/null || true
+            docker volume rm uas_project_db_data 2>/dev/null || true
+            sudo rm -rf /home/ubuntu/UAS_project/dynamic-app
+            sudo rm -f  /home/ubuntu/UAS_project/docker-compose.yml
+            sudo mkdir -p /home/ubuntu/UAS_project
+            sudo chown -R ubuntu:ubuntu /home/ubuntu/UAS_project
+
+      - name: Copy files ke EC2
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "docker-compose.yml,database/uas_db.sql"
+          target: "/home/ubuntu/UAS_project/"
+
+      - name: Deploy ke AWS EC2
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            sudo chown -R ubuntu:ubuntu /home/ubuntu/UAS_project/
+            cd /home/ubuntu/UAS_project
+            docker compose pull container-dinamis
+            docker compose up -d db-webdinamis container-dinamis
+            echo "[dinamis] deployed at $(date)"

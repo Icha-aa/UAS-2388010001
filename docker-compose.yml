@@ -1,0 +1,53 @@
+services:
+
+  # ── Web Statis (Nginx serve file CV) ──────────────────────
+  container-statis:
+    image: sitimalikha19/kerudung-statis:latest
+    build:
+      context: ./static-cv
+    container_name: kerudung_statis
+    restart: always
+    ports:
+      - "80:80"
+
+  # ── Aplikasi PHP Dynamic (Nginx + PHP-FPM dalam 1 container) ──
+  container-dinamis:
+    image: sitimalikha19/kerudung-dinamis:latest
+    build:
+      context: ./dynamic-app
+    container_name: kerudung_dinamis
+    restart: always
+    ports:
+      - "3000:80"
+    environment:
+      DB_HOST:     db-webdinamis
+      DB_NAME:     kerudung_db
+      DB_USER:     sitimalikha19
+      DB_PASSWORD: secretpass
+    depends_on:
+      db-webdinamis:
+        condition: service_healthy
+
+  # ── Database MySQL ─────────────────────────────────────────
+  db-webdinamis:
+    image: mysql:8.0
+    container_name: kerudung_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass75
+      MYSQL_DATABASE:      kerudung_db
+      MYSQL_USER:          sitimalikha19
+      MYSQL_PASSWORD:      secretpass
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./database/uas_db.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-usitimalikha19", "-psecretpass"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  db_data:
