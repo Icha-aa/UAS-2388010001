@@ -192,7 +192,7 @@ $inisial = strtoupper(substr($nama_user, 0, 2));
                     </div>
                 </div>
                 <div class="btn-group-form">
-                    <button type="submit" class="btn-submit">Simpan Pengguna</button>
+                    <button type="submit" class="btn-submit">Save User</button>
                 </div>
             </form>
         </div>
