@@ -6,20 +6,20 @@ if (isset($_POST['login'])) {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-   // Cek user di database
-$stmt = $pdo->prepare("SELECT * FROM users WHERE username = ?");
-$stmt->execute([$username]);
-$user = $stmt->fetch();
+    $stmt = $pdo->prepare("SELECT * FROM users WHERE username = ?");
+    $stmt->execute([$username]);
+    $user = $stmt->fetch();
 
-// PENTING: Gunakan password_verify jika password di database sudah di-hash
-if ($user && password_verify($password, $user['password'])) {
-    $_SESSION['login'] = true;
-    $_SESSION['user'] = $user['nama_petugas'];
-    header("Location: dashboard.php");
-    exit;
-} else {
-    $error = "Username atau Password salah!";
-}
+    if ($user && password_verify($password, $user['password'])) {
+        $_SESSION['login']        = true;
+        $_SESSION['user']         = $user['nama_petugas'];
+        $_SESSION['nama_petugas'] = $user['nama_petugas'];
+        $_SESSION['role']         = $user['role'];
+        header("Location: dashboard.php");
+        exit;
+    } else {
+        $error = "Username atau Password salah!";
+    }
 }
 ?>
 
@@ -40,11 +40,11 @@ if ($user && password_verify($password, $user['password'])) {
         
         <form method="POST">
             <div class="form-group" style="margin-bottom: 15px;">
-                <label style="display: block; margin-bottom: 5px; font-weight: 600;">Username (admin)</label>
+                <label style="display: block; margin-bottom: 5px; font-weight: 600;">Username</label>
                 <input type="text" name="username" required style="width: 100%; padding: 12px; border: 1px solid #ededeb; border-radius: 8px;">
             </div>
             <div class="form-group" style="margin-bottom: 20px;">
-                <label style="display: block; margin-bottom: 5px; font-weight: 600;">Password(12345)</label>
+                <label style="display: block; margin-bottom: 5px; font-weight: 600;">Password</label>
                 <input type="password" name="password" required style="width: 100%; padding: 12px; border: 1px solid #ededeb; border-radius: 8px;">
             </div>
             <button type="submit" name="login" style="width: 100%; background: #8e7355; color: white; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">Masuk Sistem</button>

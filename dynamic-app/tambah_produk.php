@@ -2,6 +2,7 @@
 // 1. Inisialisasi Auth & Koneksi Database PDO
 require_once 'src/db.php';
 require_once 'src/auth.php';
+urusLogin();
 
 $error = '';
 $success = '';

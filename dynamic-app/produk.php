@@ -2,6 +2,7 @@
 // 1. Memanggil sistem deteksi login dan database
 require_once 'src/db.php';
 require_once 'src/auth.php';
+urusLogin();
 
 // 2. Mengambil data produk untuk ringkasan di dashboard
 try {

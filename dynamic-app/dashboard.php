@@ -1,13 +1,15 @@
 <?php
-session_start();
-// Pastikan file koneksi ada di folder src/db.php
-include 'src/db.php'; 
+require_once 'src/db.php';
+require_once 'src/auth.php';
+urusLogin();
 
-// Contoh query untuk mengambil data dari database
-// Sesuaikan nama tabel dengan yang ada di uas_db milikmu
 $total_produk = $pdo->query("SELECT COUNT(*) FROM products")->fetchColumn();
-$total_stok = $pdo->query("SELECT SUM(stok) FROM products")->fetchColumn();
-$total_user = $pdo->query("SELECT COUNT(*) FROM users")->fetchColumn();
+$total_stok   = $pdo->query("SELECT SUM(stok) FROM products")->fetchColumn();
+$total_user   = $pdo->query("SELECT COUNT(*) FROM users")->fetchColumn();
+
+$nama_user = $_SESSION['nama_petugas'] ?? 'Admin';
+$role_user = $_SESSION['role'] ?? 'Administrator';
+$inisial   = strtoupper(substr($nama_user, 0, 2));
 ?>
 <?php
 // Data dummy untuk produk terlaris
@@ -78,9 +80,9 @@ $produk_terlaris = [
             </ul>
         </div>
         <div class="user-profile">
-            <div class="user-avatar">SM</div>
-            <div><h4 style="font-size: 0.9rem;">Siti Admin</h4><span style="font-size: 0.75rem; color: var(--text-muted);">Administrator</span></div>
-            <a href="login.php" class="logout-btn"><i class="fa-solid fa-right-from-bracket"></i></a>
+            <div class="user-avatar"><?php echo $inisial; ?></div>
+            <div><h4 style="font-size: 0.9rem;"><?php echo htmlspecialchars($nama_user); ?></h4><span style="font-size: 0.75rem; color: var(--text-muted);"><?php echo ucfirst($role_user); ?></span></div>
+            <a href="logout.php" class="logout-btn"><i class="fa-solid fa-right-from-bracket"></i></a>
         </div>
     </div>
 

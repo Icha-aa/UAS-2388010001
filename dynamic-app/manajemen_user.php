@@ -2,6 +2,7 @@
 // 1. Memanggil file koneksi database dan session auth
 require_once 'src/db.php';
 require_once 'src/auth.php';
+urusLogin();
 
 $error = '';
 $success = '';
