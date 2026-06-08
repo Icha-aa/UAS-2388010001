@@ -1,6 +1,6 @@
 FROM nginx:alpine
 
-# Salin config nginx langsung dari folder ini
+# Salin config nginx langsung dari folder
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Salin semua file CV statis ke direktori nginx
