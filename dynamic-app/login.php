@@ -28,7 +28,7 @@ if (isset($_POST['login'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - MALIKHA HOUSE</title>
+    <title>MALIKHA HOUSE</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body style="justify-content: center; align-items: center; height: 100vh; display: flex;">
